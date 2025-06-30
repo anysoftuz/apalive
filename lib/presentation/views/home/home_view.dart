@@ -1,9 +1,11 @@
+import 'package:apalive/app/auth/auth_bloc.dart';
 import 'package:apalive/assets/colors/colors.dart';
 import 'package:apalive/assets/icons/icons.dart';
 import 'package:apalive/presentation/views/chats/chats_view.dart';
 import 'package:apalive/presentation/views/home/notification_view.dart';
 import 'package:apalive/presentation/views/home/widgets/uzb_map.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,48 +20,65 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Container(
-          height: 48,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(48),
-            border: Border.all(color: borderColor),
-          ),
-          padding: EdgeInsets.all(4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 8,
-            children: [
-              SizedBox(
-                height: 40,
-                width: 40,
-                child: Stack(
+        title: BlocBuilder<AuthBloc, AuthState>(
+          builder:
+              (context, state) => Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(48),
+                  border: Border.all(color: borderColor),
+                ),
+                padding: EdgeInsets.all(4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8,
                   children: [
-                    CircleAvatar(radius: 20),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: AppIcons.verifiedTick.svg(),
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor: white,
+                            backgroundImage: NetworkImage(
+                              state.userModel.photo.isEmpty
+                                  ? "https://academy.rudn.ru/static/images/profile_default.png"
+                                  : state.userModel.photo,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: AppIcons.verifiedTick.svg(),
+                          ),
+                        ],
+                      ),
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${state.userModel.name.isEmpty ? "Shahina" : state.userModel.name} ${state.userModel.surname.isEmpty ? "Usmanova" : state.userModel.surname} ",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          'Hush kelibsiz!',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 16),
                   ],
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Shahina Usmanova ',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    'Hush kelibsiz!',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              SizedBox(width: 16),
-            ],
-          ),
         ),
         actions: [
           GestureDetector(

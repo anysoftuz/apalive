@@ -33,6 +33,7 @@ TeacherUserModel _$TeacherUserModelFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String,
       createdBy: json['created_by'],
       deletedBy: json['deleted_by'],
+      photo: json['photo'] as String? ?? '',
     );
 
 Map<String, dynamic> _$TeacherUserModelToJson(TeacherUserModel instance) =>
@@ -44,6 +45,7 @@ Map<String, dynamic> _$TeacherUserModelToJson(TeacherUserModel instance) =>
       'name': instance.name,
       'middle_name': instance.middleName,
       'surname': instance.surname,
+      'photo': instance.photo,
       'academic_degree': instance.academicDegree,
       'character_traits': instance.characterTraits,
       'passport_series': instance.passportSeries,

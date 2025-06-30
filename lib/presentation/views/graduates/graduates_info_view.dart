@@ -49,7 +49,15 @@ class _GraduatesInfoViewState extends State<GraduatesInfoView> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             spacing: 12,
                             children: [
-                              CircleAvatar(radius: 48),
+                              CircleAvatar(
+                                radius: 48,
+                                backgroundColor: white,
+                                backgroundImage: NetworkImage(
+                                  widget.model.photo.isEmpty
+                                      ? "https://academy.rudn.ru/static/images/profile_default.png"
+                                      : widget.model.photo,
+                                ),
+                              ),
                               Container(
                                 height: 28,
                                 padding: EdgeInsets.symmetric(horizontal: 12),
@@ -99,6 +107,7 @@ class _GraduatesInfoViewState extends State<GraduatesInfoView> {
                                       guid: widget.model.guid,
                                       photo: '',
                                       name: widget.model.name,
+                                      isGroup: false,
                                     ),
                               ),
                             );

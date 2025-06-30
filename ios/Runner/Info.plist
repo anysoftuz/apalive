@@ -57,9 +57,5 @@
 			<string>https</string>
 			<string>tel</string>
 		</array>
-		<key>UIBackgroundModes</key>
-		<array>
-			<string>voip</string> <!-- Jitsi Meet uchun VoIP fon rejimi -->
-		</array>
 	</dict>
 </plist>

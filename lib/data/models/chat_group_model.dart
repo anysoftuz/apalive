@@ -13,7 +13,7 @@ class ChatGroupModel {
   @JsonKey(name: "logo")
   final String logo;
   @JsonKey(name: "created_by")
-  final CreatedBy createdBy;
+  final CreatedBy? createdBy;
   @JsonKey(name: "deleted_by")
   final dynamic deletedBy;
 
@@ -22,8 +22,8 @@ class ChatGroupModel {
     required this.guid,
     required this.name,
     required this.logo,
-    required this.createdBy,
-    required this.deletedBy,
+    this.createdBy,
+    this.deletedBy,
   });
 
   factory ChatGroupModel.fromJson(Map<String, dynamic> json) =>

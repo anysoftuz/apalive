@@ -55,6 +55,11 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: white,
           bottomAppBarTheme: BottomAppBarTheme(color: white),
           dividerTheme: DividerThemeData(color: Color(0xFFE9EAEB)),
+          checkboxTheme: CheckboxThemeData(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
           appBarTheme: AppBarTheme(
             foregroundColor: white,
             backgroundColor: white,

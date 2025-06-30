@@ -11,7 +11,10 @@ ChatMessageModel _$ChatMessageModelFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       guid: json['guid'] as String,
       sender: Recipient.fromJson(json['sender'] as Map<String, dynamic>),
-      recipient: Recipient.fromJson(json['recipient'] as Map<String, dynamic>),
+      recipient:
+          json['recipient'] == null
+              ? null
+              : Recipient.fromJson(json['recipient'] as Map<String, dynamic>),
       group: json['group'],
       message: json['message'] as String,
       createdBy: json['created_by'],

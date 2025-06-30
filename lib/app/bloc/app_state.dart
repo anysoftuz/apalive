@@ -12,6 +12,8 @@ class AppState extends Equatable {
   final FormzSubmissionStatus statusTeacherUser;
   final FormzSubmissionStatus statusChatGroup;
   final FormzSubmissionStatus statusChatMessage;
+  final FormzSubmissionStatus statusAllUsers;
+  final FormzSubmissionStatus statusCreate;
   final List<ContentModel> contentList;
   final List<ChatGroupModel> chatGroup;
   final List<GraduateUserModel> graduateUser;
@@ -23,7 +25,7 @@ class AppState extends Equatable {
   final List<TeacherUserModel> teacherUser;
   final List<ChatMessageModel> chatMessage;
   final List<AllUserModel> chatUsers;
-
+  final List<AllUserModel> allUsers;
   const AppState({
     this.statusForum = FormzSubmissionStatus.initial,
     this.statusModeratorUser = FormzSubmissionStatus.initial,
@@ -35,6 +37,8 @@ class AppState extends Equatable {
     this.statusTeacherUser = FormzSubmissionStatus.initial,
     this.statusChatGroup = FormzSubmissionStatus.initial,
     this.statusChatMessage = FormzSubmissionStatus.initial,
+    this.statusAllUsers = FormzSubmissionStatus.initial,
+    this.statusCreate = FormzSubmissionStatus.initial,
     this.chatMessage = const [],
     this.chatGroup = const [],
     this.chatUsers = const [],
@@ -46,6 +50,7 @@ class AppState extends Equatable {
     this.news = const [],
     this.moderatorUser = const [],
     this.forums = const [],
+    this.allUsers = const [],
   });
 
   @override
@@ -60,6 +65,8 @@ class AppState extends Equatable {
     statusTeacherUser,
     statusChatGroup,
     statusChatMessage,
+    statusAllUsers,
+    statusCreate,
     chatMessage,
     chatGroup,
     teacherUser,
@@ -70,6 +77,7 @@ class AppState extends Equatable {
     news,
     moderatorUser,
     forums,
+    allUsers,
   ];
 
   AppState copyWith({
@@ -83,6 +91,8 @@ class AppState extends Equatable {
     FormzSubmissionStatus? statusTeacherUser,
     FormzSubmissionStatus? statusChatGroup,
     FormzSubmissionStatus? statusChatMessage,
+    FormzSubmissionStatus? statusAllUsers,
+    FormzSubmissionStatus? statusCreate,
     List<ContentModel>? contentList,
     List<ChatGroupModel>? chatGroup,
     List<GraduateUserModel>? graduateUser,
@@ -94,6 +104,7 @@ class AppState extends Equatable {
     List<TeacherUserModel>? teacherUser,
     List<ChatMessageModel>? chatMessage,
     List<AllUserModel>? chatUsers,
+    List<AllUserModel>? allUsers,
   }) {
     return AppState(
       statusForum: statusForum ?? this.statusForum,
@@ -106,6 +117,8 @@ class AppState extends Equatable {
       statusTeacherUser: statusTeacherUser ?? this.statusTeacherUser,
       statusChatGroup: statusChatGroup ?? this.statusChatGroup,
       statusChatMessage: statusChatMessage ?? this.statusChatMessage,
+      statusAllUsers: statusAllUsers ?? this.statusAllUsers,
+      statusCreate: statusCreate ?? this.statusCreate,
       contentList: contentList ?? this.contentList,
       chatGroup: chatGroup ?? this.chatGroup,
       graduateUser: graduateUser ?? this.graduateUser,
@@ -117,6 +130,7 @@ class AppState extends Equatable {
       teacherUser: teacherUser ?? this.teacherUser,
       chatMessage: chatMessage ?? this.chatMessage,
       chatUsers: chatUsers ?? this.chatUsers,
+      allUsers: allUsers ?? this.allUsers,
     );
   }
 }

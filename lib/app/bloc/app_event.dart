@@ -18,6 +18,8 @@ class TeacherUserEvent extends AppEvent {}
 
 class ForumsEvent extends AppEvent {}
 
+class GetAllUsers extends AppEvent {}
+
 class ChatGroupEvent extends AppEvent {}
 
 class ChatUsersEvent extends AppEvent {}
@@ -30,6 +32,22 @@ class ChatPutMessageEvent extends AppEvent {
 
 class ChatMessageEvent extends AppEvent {
   final String guid;
+  final bool isGroup;
 
-  ChatMessageEvent({required this.guid});
+  ChatMessageEvent({required this.guid, this.isGroup = true});
+}
+
+class CreateChatEvent extends AppEvent {
+  final String name;
+  final File? images;
+  final List<int> users;
+  final VoidCallback onSucces;
+  final VoidCallback onError;
+  CreateChatEvent({
+    required this.name,
+    required this.images,
+    required this.users,
+    required this.onSucces,
+    required this.onError,
+  });
 }

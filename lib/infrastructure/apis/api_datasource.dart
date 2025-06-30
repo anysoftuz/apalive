@@ -26,9 +26,14 @@ abstract class ApiDatasource {
   Future<ResponsModel<List<ModeratorUserModel>>> moderatorUser();
   Future<ResponsModel<List<TeacherUserModel>>> teacherUser();
   Future<ResponsModel<List<ForumsModel>>> forums();
-  Future<ResponsModel<List<AllUserModel>>> allUser();
+  Future<ResponsModel<List<AllUserModel>>> allUser(bool isChat);
   Future<ResponsModel<List<ChatGroupModel>>> chatGroup();
-  Future<ResponsModel<List<ChatMessageModel>>> chatMessage(String giud);
+  Future<ResponsModel<List<ChatMessageModel>>> chatMessage(
+    String giud,
+    bool isGroup,
+  );
+  Future<ResponsModel<ChatGroupModel>> chatGroupCreate(FormData data);
+  Future<bool> chatGroupMemberCreate(Map<String, dynamic> data);
 }
 
 class ApiDatasourceImpl implements ApiDatasource {
@@ -300,11 +305,18 @@ class ApiDatasourceImpl implements ApiDatasource {
   }
 
   @override
-  Future<ResponsModel<List<ChatMessageModel>>> chatMessage(String giud) {
+  Future<ResponsModel<List<ChatMessageModel>>> chatMessage(
+    String giud,
+    bool isGroup,
+  ) {
+    final text =
+        isGroup
+            ? "?group_guid=$giud"
+            : "?sender_guid=${StorageRepository.getString(StorageKeys.ACCOUNTS)}&recipient_guid=$giud";
     return _handle.apiCantrol(
       request:
           () => dio.get(
-            'chat-message/list/?sender_guid=${StorageRepository.getString(StorageKeys.ACCOUNTS)}&recipient_guid=$giud',
+            'chat-message/list/$text',
             options: Options(
               headers:
                   StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
@@ -330,11 +342,19 @@ class ApiDatasourceImpl implements ApiDatasource {
   }
 
   @override
-  Future<ResponsModel<List<AllUserModel>>> allUser() {
+  Future<ResponsModel<List<AllUserModel>>> allUser(bool isChat) {
     return _handle.apiCantrol(
       request:
           () => dio.get(
-            'base/all-users/?chat_user_guid=${StorageRepository.getString(StorageKeys.ACCOUNTS)}',
+            'base/all-users/',
+            queryParameters:
+                isChat
+                    ? {
+                      'chat_user_guid': StorageRepository.getString(
+                        StorageKeys.ACCOUNTS,
+                      ),
+                    }
+                    : null,
             options: Options(
               headers:
                   StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
@@ -355,6 +375,52 @@ class ApiDatasourceImpl implements ApiDatasource {
                     )
                     .toList(),
           ),
+    );
+  }
+
+  @override
+  Future<ResponsModel<ChatGroupModel>> chatGroupCreate(FormData data) {
+    return _handle.apiCantrol(
+      request:
+          () => dio.post(
+            'chat-group/create/',
+            data: data,
+            options: Options(
+              headers:
+                  StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
+                      ? {
+                        'Authorization':
+                            'Bearer ${StorageRepository.getString(StorageKeys.TOKEN)}',
+                      }
+                      : {},
+            ),
+          ),
+      body:
+          (response) => ResponsModel.fromJson(
+            response,
+            (p0) => ChatGroupModel.fromJson(p0 as Map<String, dynamic>),
+          ),
+    );
+  }
+
+  @override
+  Future<bool> chatGroupMemberCreate(Map<String, dynamic> data) {
+    return _handle.apiCantrol(
+      request:
+          () => dio.post(
+            'chat-group-member/create/',
+            data: data,
+            options: Options(
+              headers:
+                  StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
+                      ? {
+                        'Authorization':
+                            'Bearer ${StorageRepository.getString(StorageKeys.TOKEN)}',
+                      }
+                      : {},
+            ),
+          ),
+      body: (response) => response['status_code'] == 201,
     );
   }
 }

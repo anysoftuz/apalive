@@ -117,7 +117,15 @@ class GraduatesIteam extends StatelessWidget {
             Row(
               spacing: 8,
               children: [
-                CircleAvatar(),
+                CircleAvatar(
+                  radius: 24,
+                  backgroundColor: white,
+                  backgroundImage: NetworkImage(
+                    model.photo.isEmpty
+                        ? "https://academy.rudn.ru/static/images/profile_default.png"
+                        : model.photo,
+                  ),
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

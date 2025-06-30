@@ -12,7 +12,10 @@ ChatGroupModel _$ChatGroupModelFromJson(Map<String, dynamic> json) =>
       guid: json['guid'] as String,
       name: json['name'] as String,
       logo: json['logo'] as String,
-      createdBy: CreatedBy.fromJson(json['created_by'] as Map<String, dynamic>),
+      createdBy:
+          json['created_by'] == null
+              ? null
+              : CreatedBy.fromJson(json['created_by'] as Map<String, dynamic>),
       deletedBy: json['deleted_by'],
     );
 

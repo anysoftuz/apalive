@@ -40,6 +40,8 @@ class GraduateUserModel {
   final dynamic createdBy;
   @JsonKey(name: "deleted_by")
   final dynamic deletedBy;
+  @JsonKey(name: "photo")
+  final String photo;
 
   GraduateUserModel({
     this.id = 0,
@@ -54,6 +56,7 @@ class GraduateUserModel {
     this.jshshir = '',
     this.gender = '',
     this.phoneNumber = '',
+    this.photo = '',
     this.knownLanguages = const [],
     this.stateAwards = const [],
     this.academicDegree = const [],

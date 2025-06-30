@@ -18,10 +18,12 @@ class ChatView extends StatefulWidget {
     required this.guid,
     required this.photo,
     required this.name,
+    required this.isGroup,
   });
   final String guid;
   final String photo;
   final String name;
+  final bool isGroup;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -35,7 +37,7 @@ class _ChatViewState extends State<ChatView> {
   void initState() {
     super.initState();
     controller = TextEditingController();
-    context.read<AppBloc>().add(ChatMessageEvent(guid: widget.guid));
+    context.read<AppBloc>().add(ChatMessageEvent(guid: widget.guid,isGroup: widget.isGroup));
   }
 
   @override
@@ -69,7 +71,7 @@ class _ChatViewState extends State<ChatView> {
                     return Center(child: CircularProgressIndicator.adaptive());
                   }
                   return ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     reverse: true,
                     itemCount: state.chatMessage.length,
                     itemBuilder: (context, index) {

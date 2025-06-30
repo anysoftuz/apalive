@@ -22,6 +22,8 @@ class UserModel {
   final String access;
   @JsonKey(name: "refresh")
   final String refresh;
+  @JsonKey(name: "photo")
+  final String photo;
 
   const UserModel({
     this.userId = 0,
@@ -33,6 +35,7 @@ class UserModel {
     this.surname = '',
     this.access = '',
     this.refresh = '',
+    this.photo = '',
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

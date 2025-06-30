@@ -174,9 +174,12 @@ class ApiRepo implements IApiRepo {
   }
 
   @override
-  Future<Either<Failure, ResponsModel<List<ChatMessageModel>>>> chatMessage(String giud) async {
+  Future<Either<Failure, ResponsModel<List<ChatMessageModel>>>> chatMessage(
+    String giud,
+    bool isGroup,
+  ) async {
     try {
-      final result = await dataSourcheImpl.chatMessage(giud);
+      final result = await dataSourcheImpl.chatMessage(giud, isGroup);
       return Right(result);
     } on DioException {
       return Left(DioFailure());
@@ -192,7 +195,59 @@ class ApiRepo implements IApiRepo {
   @override
   Future<Either<Failure, ResponsModel<List<AllUserModel>>>> chatUsers() async {
     try {
-      final result = await dataSourcheImpl.allUser();
+      final result = await dataSourcheImpl.allUser(true);
+      return Right(result);
+    } on DioException {
+      return Left(DioFailure());
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    } on ServerException catch (e) {
+      return Left(
+        ServerFailure(errorMessage: e.errorMessage, statusCode: e.statusCode),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResponsModel<List<AllUserModel>>>> allUsers() async {
+    try {
+      final result = await dataSourcheImpl.allUser(false);
+      return Right(result);
+    } on DioException {
+      return Left(DioFailure());
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    } on ServerException catch (e) {
+      return Left(
+        ServerFailure(errorMessage: e.errorMessage, statusCode: e.statusCode),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResponsModel<ChatGroupModel>>> chatGroupCreate(
+    FormData data,
+  ) async {
+    try {
+      final result = await dataSourcheImpl.chatGroupCreate(data);
+      return Right(result);
+    } on DioException {
+      return Left(DioFailure());
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    } on ServerException catch (e) {
+      return Left(
+        ServerFailure(errorMessage: e.errorMessage, statusCode: e.statusCode),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> chatGroupMemberCreate(
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final result = await dataSourcheImpl.chatGroupMemberCreate(data);
       return Right(result);
     } on DioException {
       return Left(DioFailure());

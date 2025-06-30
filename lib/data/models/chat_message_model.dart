@@ -11,7 +11,7 @@ class ChatMessageModel {
   @JsonKey(name: "sender")
   final Recipient sender;
   @JsonKey(name: "recipient")
-  final Recipient recipient;
+  final Recipient? recipient;
   @JsonKey(name: "group")
   final dynamic group;
   @JsonKey(name: "message")
@@ -25,7 +25,7 @@ class ChatMessageModel {
     required this.id,
     required this.guid,
     required this.sender,
-    required this.recipient,
+    this.recipient,
     required this.group,
     required this.message,
     required this.createdBy,

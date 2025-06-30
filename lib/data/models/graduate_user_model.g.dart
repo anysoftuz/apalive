@@ -20,6 +20,7 @@ GraduateUserModel _$GraduateUserModelFromJson(Map<String, dynamic> json) =>
       jshshir: json['jshshir'] as String? ?? '',
       gender: json['gender'] as String? ?? '',
       phoneNumber: json['phone_number'] as String? ?? '',
+      photo: json['photo'] as String? ?? '',
       knownLanguages:
           (json['known_languages'] as List<dynamic>?)
               ?.map((e) => AcademicDegree.fromJson(e as Map<String, dynamic>))
@@ -64,6 +65,7 @@ Map<String, dynamic> _$GraduateUserModelToJson(GraduateUserModel instance) =>
       'character_traits': instance.characterTraits,
       'created_by': instance.createdBy,
       'deleted_by': instance.deletedBy,
+      'photo': instance.photo,
     };
 
 AcademicDegree _$AcademicDegreeFromJson(Map<String, dynamic> json) =>

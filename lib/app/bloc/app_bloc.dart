@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:apalive/assets/constants/storage_keys.dart';
 import 'package:apalive/data/models/all_user_model.dart';
 import 'package:apalive/data/models/chat_group_model.dart';
@@ -12,7 +14,9 @@ import 'package:apalive/data/models/video_calls_model.dart';
 import 'package:apalive/data/models/video_gallery_model.dart';
 import 'package:apalive/infrastructure/repo/api_repo.dart';
 import 'package:apalive/infrastructure/repo/storage_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
@@ -22,6 +26,36 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   final ApiRepo _repo;
   AppBloc(this._repo) : super(AppState()) {
+    on<CreateChatEvent>((event, emit) async {
+      emit(state.copyWith(statusCreate: FormzSubmissionStatus.inProgress));
+      final response = await _repo.chatGroupCreate(
+        FormData.fromMap({
+          'name': event.name,
+          'logo':
+              event.images != null
+                  ? await MultipartFile.fromFile(event.images!.path)
+                  : event.images,
+        }),
+      );
+      if (response.isRight) {
+        final response2 = await _repo.chatGroupMemberCreate({
+          'group': response.right.data.id,
+          'users': event.users,
+        });
+        if (response2.isRight) {
+          emit(state.copyWith(statusCreate: FormzSubmissionStatus.success));
+          add(ChatGroupEvent());
+          event.onSucces();
+        } else {
+          event.onError();
+          emit(state.copyWith(statusCreate: FormzSubmissionStatus.failure));
+        }
+      } else {
+        event.onError();
+        emit(state.copyWith(statusCreate: FormzSubmissionStatus.failure));
+      }
+    });
+
     on<ContentEvent>((event, emit) async {
       emit(state.copyWith(statusContent: FormzSubmissionStatus.inProgress));
       final response = await _repo.contentList();
@@ -34,6 +68,21 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         );
       } else {
         emit(state.copyWith(statusContent: FormzSubmissionStatus.failure));
+      }
+    });
+
+    on<GetAllUsers>((event, emit) async {
+      emit(state.copyWith(statusAllUsers: FormzSubmissionStatus.inProgress));
+      final response = await _repo.allUsers();
+      if (response.isRight) {
+        emit(
+          state.copyWith(
+            statusAllUsers: FormzSubmissionStatus.success,
+            allUsers: response.right.data,
+          ),
+        );
+      } else {
+        emit(state.copyWith(statusAllUsers: FormzSubmissionStatus.failure));
       }
     });
 
@@ -69,7 +118,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<ChatMessageEvent>((event, emit) async {
       emit(state.copyWith(statusChatMessage: FormzSubmissionStatus.inProgress));
-      final response = await _repo.chatMessage(event.guid);
+      final response = await _repo.chatMessage(event.guid, event.isGroup);
       if (response.isRight) {
         emit(
           state.copyWith(

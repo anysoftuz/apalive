@@ -12,6 +12,7 @@ import 'package:apalive/data/models/video_calls_model.dart';
 import 'package:apalive/data/models/video_gallery_model.dart';
 import 'package:apalive/infrastructure/core/exceptions/failures.dart';
 import 'package:apalive/utils/either.dart';
+import 'package:dio/dio.dart';
 
 abstract class IApiRepo {
   Future<Either<Failure, ResponsModel<List<ContentModel>>>> contentList();
@@ -25,7 +26,15 @@ abstract class IApiRepo {
   Future<Either<Failure, ResponsModel<List<ForumsModel>>>> forums();
   Future<Either<Failure, ResponsModel<List<ChatGroupModel>>>> chatGroup();
   Future<Either<Failure, ResponsModel<List<AllUserModel>>>> chatUsers();
+  Future<Either<Failure, ResponsModel<List<AllUserModel>>>> allUsers();
   Future<Either<Failure, ResponsModel<List<ChatMessageModel>>>> chatMessage(
     String giud,
+    bool isGroup,
+  );
+  Future<Either<Failure, ResponsModel<ChatGroupModel>>> chatGroupCreate(
+    FormData data,
+  );
+  Future<Either<Failure, bool>> chatGroupMemberCreate(
+    Map<String, dynamic> data,
   );
 }

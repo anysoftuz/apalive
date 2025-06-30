@@ -1,5 +1,4 @@
 import 'package:apalive/app/auth/auth_bloc.dart';
-import 'package:apalive/assets/colors/colors.dart';
 import 'package:apalive/assets/images/images.dart';
 import 'package:apalive/presentation/widgets/custom_snackbar.dart';
 import 'package:apalive/presentation/widgets/custom_text_field.dart';
@@ -8,6 +7,7 @@ import 'package:apalive/utils/formatters.dart';
 import 'package:apalive/utils/my_function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 class AuthView extends StatefulWidget {
   const AuthView({super.key});
@@ -74,36 +74,41 @@ class _AuthViewState extends State<AuthView> {
                 controller: controllerPassword,
               ),
               SizedBox(height: 24),
-              WButton(
-                onTap: () {
-                  context.read<AuthBloc>().add(
-                    LoginEvent(
-                      username: MyFunction.convertPhoneNumber(
-                        controllerPhone.text,
-                      ),
-                      password: controllerPassword.text,
-                      onError: () {
-                        CustomSnackbar.show(context, "User topilmadi");
-                      },
-                    ),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  return WButton(
+                    onTap: () {
+                      context.read<AuthBloc>().add(
+                        LoginEvent(
+                          username: MyFunction.convertPhoneNumber(
+                            controllerPhone.text,
+                          ),
+                          password: controllerPassword.text,
+                          onError: () {
+                            CustomSnackbar.show(context, "User topilmadi");
+                          },
+                        ),
+                      );
+                    },
+                    isLoading: state.statusSms.isInProgress,
+                    text: 'Kirish',
                   );
                 },
-                text: 'Kirish',
               ),
               SizedBox(height: 16),
-              WButton(
-                onTap: () {},
-                color: greyBack,
-                textColor: buttonBackgroundColor,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 12,
-                  children: [
-                    Text('OneID orqali kirish'),
-                    AppImages.oneid.imgAsset(),
-                  ],
-                ),
-              ),
+              // WButton(
+              //   onTap: () {},
+              //   color: greyBack,
+              //   textColor: buttonBackgroundColor,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     spacing: 12,
+              //     children: [
+              //       Text('OneID orqali kirish'),
+              //       AppImages.oneid.imgAsset(),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

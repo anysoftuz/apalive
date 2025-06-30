@@ -18,6 +18,8 @@ class TeacherUserModel {
   final String middleName;
   @JsonKey(name: "surname")
   final String surname;
+  @JsonKey(name: "photo")
+  final String photo;
   @JsonKey(name: "academic_degree")
   final List<int> academicDegree;
   @JsonKey(name: "character_traits")
@@ -63,6 +65,7 @@ class TeacherUserModel {
     required this.email,
     required this.createdBy,
     required this.deletedBy,
+    this.photo = '',
   });
 
   factory TeacherUserModel.fromJson(Map<String, dynamic> json) =>

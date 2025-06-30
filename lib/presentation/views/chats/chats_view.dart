@@ -4,7 +4,7 @@ import 'package:apalive/assets/icons/icons.dart';
 import 'package:apalive/data/models/all_user_model.dart';
 import 'package:apalive/data/models/chat_group_model.dart';
 import 'package:apalive/presentation/views/chats/chat_view.dart';
-import 'package:apalive/presentation/views/chats/create_chat_view.dart';
+import 'package:apalive/presentation/views/chats/create_chat_users_view.dart';
 import 'package:apalive/presentation/widgets/custom_text_field.dart';
 import 'package:apalive/presentation/widgets/w_scale_animation.dart';
 import 'package:apalive/presentation/widgets/w_tabbar.dart';
@@ -36,9 +36,9 @@ class _ChatsViewState extends State<ChatsView> {
         actions: [
           WScaleAnimation(
             onTap: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => CreateChatView()));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CreateChatUsersView()),
+              );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12),
@@ -168,6 +168,7 @@ class ChatIteam extends StatelessWidget {
                   guid: model.guid,
                   photo: model.logo,
                   name: model.name,
+                  isGroup: true,
                 ),
           ),
         );
@@ -212,6 +213,7 @@ class ChatUserIteam extends StatelessWidget {
                   guid: model.guid,
                   photo: model.photo,
                   name: model.fullName,
+                  isGroup: false,
                 ),
           ),
         );

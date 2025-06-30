@@ -1,22 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.anysoft.apalive">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-
+    xmlns:tools="http://schemas.android.com/tools">
     <application
         tools:replace="android:label"
         android:label="APA Live"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-
-        <!-- ❌ JitsiMeetActivity NI OLIB TASHLADIK -->
-
-        <!-- ✅ Asosiy Flutter Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -24,29 +16,17 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
-                android:resource="@style/NormalTheme" />
+                android:resource="@style/NormalTheme"
+            />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- ✅ Jitsi Meet uchun zarur bo‘lgan servis -->
-        <service
-            android:name="org.jitsi.meet.sdk.ConnectionService"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.telecom.ConnectionService" />
-            </intent-filter>
-        </service>
-
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-
-    <!-- Optional: Intent query -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />
