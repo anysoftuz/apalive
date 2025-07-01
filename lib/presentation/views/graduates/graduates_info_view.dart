@@ -108,6 +108,7 @@ class _GraduatesInfoViewState extends State<GraduatesInfoView> {
                                       photo: '',
                                       name: widget.model.name,
                                       isGroup: false,
+                                      userid: widget.model.id,
                                     ),
                               ),
                             );

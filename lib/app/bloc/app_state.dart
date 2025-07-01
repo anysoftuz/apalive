@@ -69,6 +69,7 @@ class AppState extends Equatable {
     statusCreate,
     chatMessage,
     chatGroup,
+    chatUsers,
     teacherUser,
     contentList,
     graduateUser,

@@ -4,8 +4,8 @@ part 'user_model.g.dart';
 
 @JsonSerializable()
 class UserModel {
-  @JsonKey(name: "user_id")
-  final int userId;
+  @JsonKey(name: "id")
+  final int id;
   @JsonKey(name: "guid")
   final String guid;
   @JsonKey(name: "role_name")
@@ -26,7 +26,7 @@ class UserModel {
   final String photo;
 
   const UserModel({
-    this.userId = 0,
+    this.id = 0,
     this.guid = '',
     this.roleName = '',
     this.username = '',

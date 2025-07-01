@@ -130,6 +130,37 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         emit(state.copyWith(statusChatMessage: FormzSubmissionStatus.failure));
       }
     });
+    on<ChatPutMessageSocketEvent>((event, emit) async {
+      List<ChatMessageModel> chatMessage = List.from(state.chatMessage);
+      chatMessage.insert(
+        0,
+        ChatMessageModel(
+          id: 0,
+          guid: '',
+          sender: Recipient(
+            id: event.id,
+            guid: event.guid,
+            username: '',
+            name: '',
+            surname: '',
+            middleName: '',
+          ),
+          recipient: Recipient(
+            id: 0,
+            guid: StorageRepository.getString(StorageKeys.ACCOUNTS),
+            username: '',
+            name: '',
+            surname: '',
+            middleName: '',
+          ),
+          group: null,
+          message: event.text,
+          createdBy: null,
+          deletedBy: null,
+        ),
+      );
+      emit(state.copyWith(chatMessage: chatMessage));
+    });
 
     on<ChatPutMessageEvent>((event, emit) async {
       List<ChatMessageModel> chatMessage = List.from(state.chatMessage);

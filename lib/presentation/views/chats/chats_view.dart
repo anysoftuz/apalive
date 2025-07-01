@@ -8,6 +8,7 @@ import 'package:apalive/presentation/views/chats/create_chat_users_view.dart';
 import 'package:apalive/presentation/widgets/custom_text_field.dart';
 import 'package:apalive/presentation/widgets/w_scale_animation.dart';
 import 'package:apalive/presentation/widgets/w_tabbar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -169,6 +170,7 @@ class ChatIteam extends StatelessWidget {
                   photo: model.logo,
                   name: model.name,
                   isGroup: true,
+                  userid: model.id,
                 ),
           ),
         );
@@ -176,7 +178,11 @@ class ChatIteam extends StatelessWidget {
       leading: CircleAvatar(
         radius: 24,
         backgroundColor: white,
-        backgroundImage: NetworkImage(model.logo),
+        backgroundImage: CachedNetworkImageProvider(
+          model.logo.isEmpty
+              ? "https://academy.rudn.ru/static/images/profile_default.png"
+              : model.logo,
+        ),
       ),
       trailing: Text(
         '5 daq. oldin',
@@ -214,6 +220,7 @@ class ChatUserIteam extends StatelessWidget {
                   photo: model.photo,
                   name: model.fullName,
                   isGroup: false,
+                  userid: model.id,
                 ),
           ),
         );
@@ -221,7 +228,7 @@ class ChatUserIteam extends StatelessWidget {
       leading: CircleAvatar(
         radius: 24,
         backgroundColor: white,
-        backgroundImage: NetworkImage(
+        backgroundImage: CachedNetworkImageProvider(
           model.photo.isEmpty
               ? "https://academy.rudn.ru/static/images/profile_default.png"
               : model.photo,

@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:apalive/app/auth/auth_bloc.dart';
 import 'package:apalive/app/bloc/app_bloc.dart';
 import 'package:apalive/assets/colors/colors.dart';
 import 'package:apalive/assets/constants/storage_keys.dart';
+import 'package:apalive/data/models/web_socket_model.dart';
 import 'package:apalive/infrastructure/repo/storage_repository.dart';
 import 'package:apalive/presentation/widgets/bottom_container.dart';
 import 'package:apalive/presentation/widgets/custom_text_field.dart';
@@ -11,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({
@@ -19,10 +23,12 @@ class ChatView extends StatefulWidget {
     required this.photo,
     required this.name,
     required this.isGroup,
+    required this.userid,
   });
   final String guid;
   final String photo;
   final String name;
+  final int userid;
   final bool isGroup;
 
   @override
@@ -32,12 +38,66 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   // ValueNotifier<String> valueNotifier = ValueNotifier('');
   late TextEditingController controller;
+  late WebSocketChannel channel;
 
   @override
   void initState() {
     super.initState();
     controller = TextEditingController();
-    context.read<AppBloc>().add(ChatMessageEvent(guid: widget.guid,isGroup: widget.isGroup));
+    context.read<AppBloc>().add(
+      ChatMessageEvent(guid: widget.guid, isGroup: widget.isGroup),
+    );
+    connectionSoket();
+  }
+
+  Future<void> connectionSoket() async {
+    channel = WebSocketChannel.connect(
+      Uri.parse('wss://apa-live-backend.gettest.uz/ws/chat/room/'),
+    );
+    await channel.ready;
+    Log.i('ready');
+    channel.stream.listen(
+      (message) {
+        Log.i(message);
+        final model = WebSocketModel.fromJson(jsonDecode(message));
+        if (mounted) {
+          context.read<AppBloc>().add(
+            ChatPutMessageSocketEvent(
+              text: model.message ?? "",
+              guid:
+                  (model.senderId ?? 0) ==
+                          context.read<AuthBloc>().state.userModel.id
+                      ? StorageRepository.getString(StorageKeys.ACCOUNTS)
+                      : widget.guid,
+              id: model.senderId ?? 0,
+            ),
+          );
+        }
+      },
+      onDone: () {
+        Log.e("❌ WebSocket disconnected.");
+      },
+      onError: (error) {
+        Log.e(error);
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    channel.sink.close();
+    controller.dispose();
+    super.dispose();
+  }
+
+  void sendSafe(dynamic data) {
+    try {
+      Log.i(jsonEncode(data));
+      channel.sink.add(jsonEncode(data));
+      Log.i("✅ Sent successfully.");
+    } catch (e) {
+      Log.e("❌ WebSocket is closed: $e");
+    }
   }
 
   @override
@@ -47,7 +107,12 @@ class _ChatViewState extends State<ChatView> {
         titleSpacing: 8,
         title: ListTile(
           leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(widget.photo),
+            backgroundColor: white,
+            backgroundImage: CachedNetworkImageProvider(
+              widget.photo.isEmpty
+                  ? "https://academy.rudn.ru/static/images/profile_default.png"
+                  : widget.photo,
+            ),
           ),
           title: Text(widget.name),
           contentPadding: EdgeInsets.zero,
@@ -78,7 +143,7 @@ class _ChatViewState extends State<ChatView> {
                       final isMe =
                           state.chatMessage[index].sender.guid ==
                           StorageRepository.getString(StorageKeys.ACCOUNTS);
-                      Log.i(StorageRepository.getString(StorageKeys.ACCOUNTS));
+
                       return Align(
                         alignment:
                             (isMe) ? Alignment.topRight : Alignment.topLeft,
@@ -143,10 +208,24 @@ class _ChatViewState extends State<ChatView> {
                 ),
                 IconButton(
                   onPressed: () {
-                    context.read<AppBloc>().add(
-                      ChatPutMessageEvent(text: controller.text),
-                    );
-                    controller.clear();
+                    if (controller.text.trim().isNotEmpty) {
+                      final data =
+                          widget.isGroup
+                              ? {
+                                "message": controller.text.trim(),
+                                "sender_id":
+                                    context.read<AuthBloc>().state.userModel.id,
+                                "group_id": widget.userid,
+                              }
+                              : {
+                                "message": controller.text.trim(),
+                                "sender_id":
+                                    context.read<AuthBloc>().state.userModel.id,
+                                "recipient_id": widget.userid,
+                              };
+                      sendSafe(data);
+                      controller.clear();
+                    }
                   },
                   icon: CircleAvatar(
                     backgroundColor: blue,

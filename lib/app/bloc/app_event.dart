@@ -30,6 +30,18 @@ class ChatPutMessageEvent extends AppEvent {
   ChatPutMessageEvent({required this.text});
 }
 
+class ChatPutMessageSocketEvent extends AppEvent {
+  final String text;
+  final int id;
+  final String guid;
+
+  ChatPutMessageSocketEvent({
+    required this.text,
+    required this.id,
+    required this.guid,
+  });
+}
+
 class ChatMessageEvent extends AppEvent {
   final String guid;
   final bool isGroup;
