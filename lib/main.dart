@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: white,
-          bottomAppBarTheme: BottomAppBarTheme(color: white),
+          bottomAppBarTheme: BottomAppBarThemeData(color: white),
           dividerTheme: DividerThemeData(color: Color(0xFFE9EAEB)),
           checkboxTheme: CheckboxThemeData(
             shape: RoundedRectangleBorder(

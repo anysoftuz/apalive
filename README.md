@@ -26,4 +26,4 @@ flutter build appbundle --release --build-name=1.0.18 --build-number=18
 flutter build apk --release
 
 build runner:
-flutter pub run build_runner build --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs

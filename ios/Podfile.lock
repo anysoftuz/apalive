@@ -6,10 +6,10 @@ PODS:
     - libwebp
   - image_picker_ios (0.0.1):
     - Flutter
-  - jitsi_meet_flutter_sdk (11.2.0):
+  - jitsi_meet_flutter_sdk (11.5.1):
     - Flutter
-    - JitsiMeetSDK (= 11.2.0)
-  - JitsiMeetSDK (11.2.0):
+    - JitsiMeetSDK (= 11.5.1)
+  - JitsiMeetSDK (11.5.1):
     - Giphy (= 2.2.12)
     - JitsiWebRTC (~> 124.0)
   - JitsiWebRTC (124.0.2)
@@ -75,11 +75,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   Giphy: 83628960ed04e1c3428ff1b4fb2b027f65e82f50
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
-  jitsi_meet_flutter_sdk: 5358245bcdd36dcf4db2f2f1b623adb3803d27ee
-  JitsiMeetSDK: 414bcd948c2fd082a4078bc16813cb36936d868a
+  jitsi_meet_flutter_sdk: 9697ec39f99e5fc66fe8e1ab54c95c5c53e0d55e
+  JitsiMeetSDK: 8e64089e7832ffe3473e1edd8b2ec8e001689762
   JitsiWebRTC: b47805ab5668be38e7ee60e2258f49badfe8e1d0
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564

@@ -15,14 +15,12 @@ TeacherUserModel _$TeacherUserModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       middleName: json['middle_name'] as String,
       surname: json['surname'] as String,
-      academicDegree:
-          (json['academic_degree'] as List<dynamic>)
-              .map((e) => (e as num).toInt())
-              .toList(),
-      characterTraits:
-          (json['character_traits'] as List<dynamic>)
-              .map((e) => (e as num).toInt())
-              .toList(),
+      academicDegree: (json['academic_degree'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
+      characterTraits: (json['character_traits'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
       passportSeries: json['passport_series'] as String,
       birthDate: json['birth_date'] as String,
       jshshir: json['jshshir'] as String,

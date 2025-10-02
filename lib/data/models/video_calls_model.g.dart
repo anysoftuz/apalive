@@ -13,10 +13,9 @@ VideoCallsModel _$VideoCallsModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       date: json['date'] as String,
       startTime: json['start_time'] as String,
-      participants:
-          (json['participants'] as List<dynamic>)
-              .map((e) => (e as num).toInt())
-              .toList(),
+      participants: (json['participants'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
       roomName: json['room_name'] as String,
       videoUrl: json['video_url'] as String,
       createdBy: json['created_by'],
