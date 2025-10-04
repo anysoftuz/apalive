@@ -1,10 +1,15 @@
 import 'package:apalive/data/models/all_user_model.dart';
+import 'package:apalive/data/models/books/books_category_model.dart';
+import 'package:apalive/data/models/books/books_model.dart';
 import 'package:apalive/data/models/chat_group_model.dart';
 import 'package:apalive/data/models/chat_message_model.dart';
+import 'package:apalive/data/models/common/filter_model.dart';
 import 'package:apalive/data/models/common/respons_model.dart';
 import 'package:apalive/data/models/content_model.dart';
 import 'package:apalive/data/models/forum/forums_model.dart';
 import 'package:apalive/data/models/graduate_user_model.dart';
+import 'package:apalive/data/models/home/region_statistics_model.dart';
+import 'package:apalive/data/models/home/statistics_model.dart';
 import 'package:apalive/data/models/moderator_user_model.dart';
 import 'package:apalive/data/models/news_model.dart';
 import 'package:apalive/data/models/teacher_user_model.dart';
@@ -36,5 +41,14 @@ abstract class IApiRepo {
   );
   Future<Either<Failure, bool>> chatGroupMemberCreate(
     Map<String, dynamic> data,
+  );
+  Future<Either<Failure, ResponsModel<List<BooksModel>>>> getBooks(
+    FilterModel filter,
+  );
+  Future<Either<Failure, ResponsModel<List<BooksCategoryModel>>>>
+  getBooksCategory();
+  Future<Either<Failure, ResponsModel<StatisticsModel>>> statistics();
+  Future<Either<Failure, ResponsModel<RegionStatisticsModel>>> regionStatistics(
+    String region,
   );
 }

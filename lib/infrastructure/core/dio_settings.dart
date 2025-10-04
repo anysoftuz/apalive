@@ -6,39 +6,37 @@ import 'package:flutter/foundation.dart';
 
 class DioSettings {
   BaseOptions _dioBaseOptions = BaseOptions(
-    baseUrl: "https://apa-live-backend.gettest.uz/api/v1/",
+    baseUrl: "https://apa-live-api.dsba.uz/api/v1/",
     connectTimeout: const Duration(milliseconds: 35000),
     receiveTimeout: const Duration(milliseconds: 35000),
     followRedirects: false,
-    headers:
-        StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
-            ? {
-              'Authorization':
-                  'Bearer ${StorageRepository.getString(StorageKeys.TOKEN)}',
-            }
-            : {},
+    headers: StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
+        ? {
+            'Authorization':
+                'Bearer ${StorageRepository.getString(StorageKeys.TOKEN)}',
+          }
+        : {},
     validateStatus: (status) => status != null && status <= 500,
   );
 
   void setBaseOptions({String? lang}) {
     _dioBaseOptions = BaseOptions(
-      baseUrl: "https://apa-live-backend.gettest.uz/api/v1/",
+      baseUrl: "https://apa-live-api.dsba.uz/api/v1/",
       connectTimeout: const Duration(milliseconds: 35000),
       receiveTimeout: const Duration(milliseconds: 35000),
-      headers:
-          StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
-              ? {
-                'Authorization':
-                    'Bearer ${StorageRepository.getString(StorageKeys.TOKEN)}',
-              }
-              : {},
+      headers: StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
+          ? {
+              'Authorization':
+                  'Bearer ${StorageRepository.getString(StorageKeys.TOKEN)}',
+            }
+          : {},
       followRedirects: false,
       validateStatus: (status) => status != null && status <= 500,
     );
   }
 
   final BaseOptions _dioBaseOptionsForAuth = BaseOptions(
-    baseUrl: "https://apa-live-backend.gettest.uz/api/v1/",
+    baseUrl: "https://apa-live-api.dsba.uz/api/v1/",
     connectTimeout: const Duration(milliseconds: 35000),
     receiveTimeout: const Duration(milliseconds: 35000),
     followRedirects: false,
@@ -48,7 +46,7 @@ class DioSettings {
 
   void setBaseOptionsForAuth({String? lang}) {
     _dioBaseOptions = BaseOptions(
-      baseUrl: "https://apa-live-backend.gettest.uz/api/v1/",
+      baseUrl: "https://apa-live-api.dsba.uz/api/v1/",
       connectTimeout: const Duration(milliseconds: 35000),
       receiveTimeout: const Duration(milliseconds: 35000),
       headers: <String, dynamic>{},

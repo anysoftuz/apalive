@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 abstract class AuthDatasourche {
   Future<ResponsModel<List<UserModel>>> getMe();
   Future<ResponsModel<UserModel>> login(Map<String, dynamic> data);
+  
 }
 
 class AuthDataSourcheImpl implements AuthDatasourche {

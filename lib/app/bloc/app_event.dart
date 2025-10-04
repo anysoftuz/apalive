@@ -2,6 +2,23 @@ part of 'app_bloc.dart';
 
 sealed class AppEvent {}
 
+class StatisticsEvent extends AppEvent {}
+
+class RegionStatisticsEvent extends AppEvent {
+  final String region;
+
+  RegionStatisticsEvent({required this.region});
+}
+
+class BooksEvent extends AppEvent {
+  final String? search;
+  final int? categoryId;
+
+  BooksEvent({this.search, this.categoryId});
+}
+
+class BooksCategoryEvent extends AppEvent {}
+
 class ContentEvent extends AppEvent {}
 
 class GraduateUserEvent extends AppEvent {}

@@ -52,7 +52,7 @@ class _ChatViewState extends State<ChatView> {
 
   Future<void> connectionSoket() async {
     channel = WebSocketChannel.connect(
-      Uri.parse('wss://apa-live-backend.gettest.uz/ws/chat/room/'),
+      Uri.parse('wss://apa-live-api.dsba.uz/ws/chat/room/'),
     );
     await channel.ready;
     Log.i('ready');
@@ -66,9 +66,9 @@ class _ChatViewState extends State<ChatView> {
               text: model.message ?? "",
               guid:
                   (model.senderId ?? 0) ==
-                          context.read<AuthBloc>().state.userModel.id
-                      ? StorageRepository.getString(StorageKeys.ACCOUNTS)
-                      : widget.guid,
+                      context.read<AuthBloc>().state.userModel.id
+                  ? StorageRepository.getString(StorageKeys.ACCOUNTS)
+                  : widget.guid,
               id: model.senderId ?? 0,
             ),
           );
@@ -145,8 +145,9 @@ class _ChatViewState extends State<ChatView> {
                           StorageRepository.getString(StorageKeys.ACCOUNTS);
 
                       return Align(
-                        alignment:
-                            (isMe) ? Alignment.topRight : Alignment.topLeft,
+                        alignment: (isMe)
+                            ? Alignment.topRight
+                            : Alignment.topLeft,
                         child: Container(
                           constraints: BoxConstraints(
                             maxWidth:
@@ -159,14 +160,12 @@ class _ChatViewState extends State<ChatView> {
                             borderRadius: BorderRadius.only(
                               topLeft: const Radius.circular(20),
                               topRight: const Radius.circular(20),
-                              bottomLeft:
-                                  isMe
-                                      ? const Radius.circular(20)
-                                      : Radius.zero,
-                              bottomRight:
-                                  isMe
-                                      ? Radius.zero
-                                      : const Radius.circular(20),
+                              bottomLeft: isMe
+                                  ? const Radius.circular(20)
+                                  : Radius.zero,
+                              bottomRight: isMe
+                                  ? Radius.zero
+                                  : const Radius.circular(20),
                             ),
                             color: isMe ? blue : Color(0xFFF2F4F7),
                           ),
@@ -209,20 +208,25 @@ class _ChatViewState extends State<ChatView> {
                 IconButton(
                   onPressed: () {
                     if (controller.text.trim().isNotEmpty) {
-                      final data =
-                          widget.isGroup
-                              ? {
-                                "message": controller.text.trim(),
-                                "sender_id":
-                                    context.read<AuthBloc>().state.userModel.id,
-                                "group_id": widget.userid,
-                              }
-                              : {
-                                "message": controller.text.trim(),
-                                "sender_id":
-                                    context.read<AuthBloc>().state.userModel.id,
-                                "recipient_id": widget.userid,
-                              };
+                      final data = widget.isGroup
+                          ? {
+                              "message": controller.text.trim(),
+                              "sender_id": context
+                                  .read<AuthBloc>()
+                                  .state
+                                  .userModel
+                                  .id,
+                              "group_id": widget.userid,
+                            }
+                          : {
+                              "message": controller.text.trim(),
+                              "sender_id": context
+                                  .read<AuthBloc>()
+                                  .state
+                                  .userModel
+                                  .id,
+                              "recipient_id": widget.userid,
+                            };
                       sendSafe(data);
                       controller.clear();
                     }

@@ -33,6 +33,8 @@ class AuthRepo implements IAuthRepo {
       return Left(
         ServerFailure(errorMessage: e.errorMessage, statusCode: e.statusCode),
       );
+    } catch (e) {
+      return Left(ServerFailure(errorMessage: e.toString(), statusCode: 0));
     }
   }
 
@@ -57,6 +59,8 @@ class AuthRepo implements IAuthRepo {
       return Left(
         ServerFailure(errorMessage: e.errorMessage, statusCode: e.statusCode),
       );
+    } catch (e) {
+      return Left(ServerFailure(errorMessage: e.toString(), statusCode: 0));
     }
   }
 }

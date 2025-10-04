@@ -38,6 +38,7 @@ class AppIcons {
   static const logo = 'assets/svg/logo.svg';
   static const messageChat = 'assets/svg/message-chat-square.svg';
   static const arrowUpRight = 'assets/svg/arrow-up-right.svg';
+  static const inbox = 'assets/svg/inbox.svg';
 }
 
 extension SvgExt on String {

@@ -12,14 +12,15 @@ TeacherUserModel _$TeacherUserModelFromJson(Map<String, dynamic> json) =>
       guid: json['guid'] as String,
       username: json['username'] as String,
       password: json['password'] as String,
+      photo: json['photo'],
       name: json['name'] as String,
       middleName: json['middle_name'] as String,
       surname: json['surname'] as String,
       academicDegree: (json['academic_degree'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
+          .map((e) => AcademicDegree.fromJson(e as Map<String, dynamic>))
           .toList(),
       characterTraits: (json['character_traits'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
+          .map((e) => AcademicDegree.fromJson(e as Map<String, dynamic>))
           .toList(),
       passportSeries: json['passport_series'] as String,
       birthDate: json['birth_date'] as String,
@@ -31,7 +32,6 @@ TeacherUserModel _$TeacherUserModelFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String,
       createdBy: json['created_by'],
       deletedBy: json['deleted_by'],
-      photo: json['photo'] as String? ?? '',
     );
 
 Map<String, dynamic> _$TeacherUserModelToJson(TeacherUserModel instance) =>
@@ -40,10 +40,10 @@ Map<String, dynamic> _$TeacherUserModelToJson(TeacherUserModel instance) =>
       'guid': instance.guid,
       'username': instance.username,
       'password': instance.password,
+      'photo': instance.photo,
       'name': instance.name,
       'middle_name': instance.middleName,
       'surname': instance.surname,
-      'photo': instance.photo,
       'academic_degree': instance.academicDegree,
       'character_traits': instance.characterTraits,
       'passport_series': instance.passportSeries,
@@ -54,6 +54,24 @@ Map<String, dynamic> _$TeacherUserModelToJson(TeacherUserModel instance) =>
       'job_title': instance.jobTitle,
       'work_experience': instance.workExperience,
       'email': instance.email,
+      'created_by': instance.createdBy,
+      'deleted_by': instance.deletedBy,
+    };
+
+AcademicDegree _$AcademicDegreeFromJson(Map<String, dynamic> json) =>
+    AcademicDegree(
+      id: (json['id'] as num).toInt(),
+      guid: json['guid'] as String,
+      title: json['title'] as String,
+      createdBy: json['created_by'],
+      deletedBy: json['deleted_by'],
+    );
+
+Map<String, dynamic> _$AcademicDegreeToJson(AcademicDegree instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'guid': instance.guid,
+      'title': instance.title,
       'created_by': instance.createdBy,
       'deleted_by': instance.deletedBy,
     };

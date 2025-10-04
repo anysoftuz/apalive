@@ -14,6 +14,9 @@ class AppImages {
   static const book = 'assets/images/book.png';
   static const logo = 'assets/images/logo.png';
   static const odam = 'assets/images/odam.png';
+  static const rahbariyat_1 = 'assets/images/rahbariyat_1.png';
+  static const rahbariyat_2 = 'assets/images/rahbariyat_2.jpg';
+  static const rahbariyat_3 = 'assets/images/rahbariyat_3.jpg';
 }
 
 extension ImgExt on String {

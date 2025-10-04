@@ -2,9 +2,7 @@ import 'package:apalive/app/bloc/app_bloc.dart';
 import 'package:apalive/assets/colors/colors.dart';
 import 'package:apalive/assets/icons/icons.dart';
 import 'package:apalive/assets/images/images.dart';
-import 'package:apalive/data/models/moderator_user_model.dart';
 import 'package:apalive/data/models/teacher_user_model.dart';
-import 'package:apalive/presentation/widgets/custom_text_field.dart';
 import 'package:apalive/presentation/widgets/w_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:blur/blur.dart';
@@ -20,6 +18,27 @@ class AcademyView extends StatefulWidget {
 }
 
 class _AcademyViewState extends State<AcademyView> {
+  List<Rahbariyat> rahbariyat = [
+    Rahbariyat(
+      image: AppImages.rahbariyat_1,
+      name: 'Salixov Jasur Shavkatovich',
+      jobTitle:
+          'O‘zbekiston Respublikasi Prezidenti huzuridagi Davlat siyosati va boshqaruvi akademiyasi rektori',
+    ),
+    Rahbariyat(
+      image: AppImages.rahbariyat_2,
+      name: 'Azizov Xudoykul Tadjiyevich',
+      jobTitle:
+          'O‘zbekiston Respublikasi Prezidenti huzuridagi Davlat boshqaruvi akademiyasi o‘quv ishlari bo‘yicha birinchi prorektori',
+    ),
+    Rahbariyat(
+      image: AppImages.rahbariyat_3,
+      name: 'Umarov Alisher Yusubjanovich',
+      jobTitle:
+          'O‘zbekiston Respublikasi Prezidenti huzuridagi Davlat boshqaruvi akademiyasi ilmiy ishlar va xalqaro aloqalar bo‘yicha prorektori',
+    ),
+  ];
+
   @override
   void initState() {
     context.read<AppBloc>().add(ModeratorUserEvent());
@@ -39,7 +58,10 @@ class _AcademyViewState extends State<AcademyView> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               child: WTabBar(
-                tabs: [Tab(text: 'Rahbariyat'), Tab(text: 'O’qituvchilar')],
+                tabs: [
+                  Tab(text: 'Rahbariyat'),
+                  Tab(text: 'O’qituvchilar'),
+                ],
               ),
             ),
           ),
@@ -48,96 +70,89 @@ class _AcademyViewState extends State<AcademyView> {
           children: [
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                  child: CustomTextField(
-                    hintText: 'Rahbarni qidirish',
-                    prefixIcon: AppIcons.search.svg(),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                //   child: CustomTextField(
+                //     hintText: 'Rahbarni qidirish',
+                //     prefixIcon: AppIcons.search.svg(),
+                //   ),
+                // ),
                 Expanded(
-                  child: BlocBuilder<AppBloc, AppState>(
-                    builder: (context, state) {
-                      return ListView.separated(
-                        padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                        itemBuilder:
-                            (context, index) => ModeratorIteam(
-                              model: state.moderatorUser[index],
-                            ),
-                        separatorBuilder:
-                            (context, index) => SizedBox(height: 12),
-                        itemCount: state.moderatorUser.length,
-                      );
-                    },
+                  child: ListView.separated(
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    itemBuilder: (context, index) =>
+                        ModeratorIteam(model: rahbariyat[index]),
+                    separatorBuilder: (context, index) => SizedBox(height: 12),
+                    itemCount: rahbariyat.length,
                   ),
                 ),
               ],
             ),
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                  child: Column(
-                    spacing: 12,
-                    children: [
-                      CustomTextField(
-                        hintText: 'O’qituvchi qidirish',
-                        prefixIcon: AppIcons.search.svg(),
-                      ),
-                      Row(
-                        spacing: 12,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: borderColor),
-                                color: greyBack,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 8,
-                                children: [
-                                  AppIcons.filter.svg(),
-                                  Text(
-                                    'Filter',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: borderColor),
-                                color: greyBack,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 8,
-                                children: [
-                                  AppIcons.excel.svg(),
-                                  Text(
-                                    'Yuklab olish',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                //   child: Column(
+                //     spacing: 12,
+                //     children: [
+                //       CustomTextField(
+                //         hintText: 'O’qituvchi qidirish',
+                //         prefixIcon: AppIcons.search.svg(),
+                //       ),
+                //       Row(
+                //         spacing: 12,
+                //         children: [
+                //           Expanded(
+                //             child: Container(
+                //               height: 40,
+                //               decoration: BoxDecoration(
+                //                 border: Border.all(color: borderColor),
+                //                 color: greyBack,
+                //                 borderRadius: BorderRadius.circular(12),
+                //               ),
+                //               child: Row(
+                //                 mainAxisAlignment: MainAxisAlignment.center,
+                //                 spacing: 8,
+                //                 children: [
+                //                   AppIcons.filter.svg(),
+                //                   Text(
+                //                     'Filter',
+                //                     style: TextStyle(
+                //                       fontWeight: FontWeight.w600,
+                //                     ),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //           Expanded(
+                //             child: Container(
+                //               height: 40,
+                //               decoration: BoxDecoration(
+                //                 border: Border.all(color: borderColor),
+                //                 color: greyBack,
+                //                 borderRadius: BorderRadius.circular(12),
+                //               ),
+                //               child: Row(
+                //                 mainAxisAlignment: MainAxisAlignment.center,
+                //                 spacing: 8,
+                //                 children: [
+                //                   AppIcons.excel.svg(),
+                //                   Text(
+                //                     'Yuklab olish',
+                //                     style: TextStyle(
+                //                       fontWeight: FontWeight.w600,
+                //                     ),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Expanded(
                   child: BlocBuilder<AppBloc, AppState>(
                     builder: (context, state) {
@@ -146,13 +161,15 @@ class _AcademyViewState extends State<AcademyView> {
                           child: CircularProgressIndicator.adaptive(),
                         );
                       }
+                      if (state.teacherUser.isEmpty) {
+                        return Center(child: Text('No data'));
+                      }
                       return ListView.separated(
                         padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-                        itemBuilder:
-                            (context, index) =>
-                                TeacherIteam(model: state.teacherUser[index]),
-                        separatorBuilder:
-                            (context, index) => SizedBox(height: 12),
+                        itemBuilder: (context, index) =>
+                            TeacherIteam(model: state.teacherUser[index]),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 12),
                         itemCount: state.teacherUser.length,
                       );
                     },
@@ -170,7 +187,7 @@ class _AcademyViewState extends State<AcademyView> {
 class ModeratorIteam extends StatelessWidget {
   const ModeratorIteam({super.key, required this.model});
 
-  final ModeratorUserModel model;
+  final Rahbariyat model;
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +202,7 @@ class ModeratorIteam extends StatelessWidget {
             //   fit: BoxFit.cover,
             //   width: double.infinity,
             // ),
-            AppImages.odam.imgAsset(fit: BoxFit.cover, width: double.infinity),
+            model.image.imgAsset(fit: BoxFit.cover, width: double.infinity),
             Positioned(
               bottom: 0,
               left: 0,
@@ -198,7 +215,7 @@ class ModeratorIteam extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${model.name} ${model.middleName} ${model.surname}",
+                          model.name,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -216,7 +233,9 @@ class ModeratorIteam extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                final url = Uri.parse(model.facebookUrl ?? '');
+                                final url = Uri.parse(
+                                  'https://www.facebook.com/',
+                                );
                                 if (await canLaunchUrl(url)) {
                                   await launchUrl(
                                     url,
@@ -229,7 +248,9 @@ class ModeratorIteam extends StatelessWidget {
                             SizedBox(width: 12),
                             GestureDetector(
                               onTap: () async {
-                                final url = Uri.parse(model.linkedinUrl ?? '');
+                                final url = Uri.parse(
+                                  'https://www.linkedin.com/',
+                                );
                                 if (await canLaunchUrl(url)) {
                                   await launchUrl(
                                     url,
@@ -242,7 +263,9 @@ class ModeratorIteam extends StatelessWidget {
                             SizedBox(width: 12),
                             GestureDetector(
                               onTap: () async {
-                                final url = Uri.parse(model.instagramUrl ?? '');
+                                final url = Uri.parse(
+                                  'https://www.instagram.com/',
+                                );
                                 if (await canLaunchUrl(url)) {
                                   await launchUrl(
                                     url,
@@ -288,9 +311,8 @@ class TeacherIteam extends StatelessWidget {
                 radius: 24,
                 backgroundColor: white,
                 backgroundImage: NetworkImage(
-                  model.photo.isEmpty
-                      ? "https://academy.rudn.ru/static/images/profile_default.png"
-                      : model.photo,
+                  model.photo ??
+                      "https://academy.rudn.ru/static/images/profile_default.png",
                 ),
               ),
               Column(
@@ -376,4 +398,12 @@ class TeacherIteam extends StatelessWidget {
       ),
     );
   }
+}
+
+class Rahbariyat {
+  final String image;
+  final String name;
+  final String jobTitle;
+
+  Rahbariyat({required this.image, required this.name, required this.jobTitle});
 }

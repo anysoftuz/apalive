@@ -2,9 +2,8 @@ import 'package:apalive/app/bloc/app_bloc.dart';
 import 'package:apalive/assets/colors/colors.dart';
 import 'package:apalive/assets/icons/icons.dart';
 import 'package:apalive/data/models/graduate_user_model.dart';
-import 'package:apalive/presentation/views/graduates/graduates_filter_view.dart';
 import 'package:apalive/presentation/views/graduates/graduates_info_view.dart';
-import 'package:apalive/presentation/widgets/custom_text_field.dart';
+import 'package:apalive/presentation/widgets/w_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -28,47 +27,71 @@ class _GraduatesViewState extends State<GraduatesView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Bitiruvchilar'),
-        bottom: PreferredSize(
-          preferredSize: Size(double.infinity, 56),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: CustomTextField(
-                    hintText: 'Bitiruvchini qidirish',
-                    prefixIcon: AppIcons.search.svg(),
-                  ),
-                ),
-                SizedBox(width: 12),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => GraduatesFilterView(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    height: 48,
-                    width: 48,
-                    decoration: BoxDecoration(
-                      color: greyBack,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.all(12),
-                    child: AppIcons.filter.svg(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+
+        // bottom: PreferredSize(
+        //   preferredSize: Size(double.infinity, 56),
+        //   child: Padding(
+        //     padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        //     child: Row(
+        //       children: [
+        //         Expanded(
+        //           child: CustomTextField(
+        //             hintText: 'Bitiruvchini qidirish',
+        //             prefixIcon: AppIcons.search.svg(),
+        //           ),
+        //         ),
+        //         SizedBox(width: 12),
+        //         GestureDetector(
+        //           onTap: () {
+        //             Navigator.of(context).push(
+        //               MaterialPageRoute(
+        //                 builder: (context) => GraduatesFilterView(),
+        //               ),
+        //             );
+        //           },
+        //           child: Container(
+        //             height: 48,
+        //             width: 48,
+        //             decoration: BoxDecoration(
+        //               color: greyBack,
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             padding: EdgeInsets.all(12),
+        //             child: AppIcons.filter.svg(),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
       body: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
           if (state.statusGraduateUser.isInProgress) {
             return Center(child: CircularProgressIndicator.adaptive());
+          }
+          if (state.graduateUser.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppIcons.inbox.svg(height: 160, width: 160),
+                  SizedBox(height: 12),
+                  Text(
+                    'Bitiruvchilar mavjud emas',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 32),
+                  WButton(
+                    width: 200,
+                    onTap: () {
+                      context.read<AppBloc>().add(GraduateUserEvent());
+                    },
+                    text: 'Qayta yuklash',
+                  ),
+                ],
+              ),
+            );
           }
           return RefreshIndicator.adaptive(
             onRefresh: () async {
@@ -77,9 +100,8 @@ class _GraduatesViewState extends State<GraduatesView> {
             },
             child: ListView.separated(
               padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-              itemBuilder:
-                  (context, index) =>
-                      GraduatesIteam(model: state.graduateUser[index]),
+              itemBuilder: (context, index) =>
+                  GraduatesIteam(model: state.graduateUser[index]),
               separatorBuilder: (context, index) => SizedBox(height: 12),
               itemCount: state.graduateUser.length,
             ),

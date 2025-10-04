@@ -14,6 +14,10 @@ class AppState extends Equatable {
   final FormzSubmissionStatus statusChatMessage;
   final FormzSubmissionStatus statusAllUsers;
   final FormzSubmissionStatus statusCreate;
+  final FormzSubmissionStatus statusBooks;
+  final FormzSubmissionStatus statusBooksCategory;
+  final FormzSubmissionStatus statusStatistics;
+  final FormzSubmissionStatus statusRegionStatistics;
   final List<ContentModel> contentList;
   final List<ChatGroupModel> chatGroup;
   final List<GraduateUserModel> graduateUser;
@@ -26,6 +30,10 @@ class AppState extends Equatable {
   final List<ChatMessageModel> chatMessage;
   final List<AllUserModel> chatUsers;
   final List<AllUserModel> allUsers;
+  final List<BooksModel> books;
+  final List<BooksCategoryModel> booksCategory;
+  final StatisticsModel statistics;
+  final RegionStatisticsModel regionStatistics;
   const AppState({
     this.statusForum = FormzSubmissionStatus.initial,
     this.statusModeratorUser = FormzSubmissionStatus.initial,
@@ -39,6 +47,10 @@ class AppState extends Equatable {
     this.statusChatMessage = FormzSubmissionStatus.initial,
     this.statusAllUsers = FormzSubmissionStatus.initial,
     this.statusCreate = FormzSubmissionStatus.initial,
+    this.statusBooks = FormzSubmissionStatus.initial,
+    this.statusBooksCategory = FormzSubmissionStatus.initial,
+    this.statusStatistics = FormzSubmissionStatus.initial,
+    this.statusRegionStatistics = FormzSubmissionStatus.initial,
     this.chatMessage = const [],
     this.chatGroup = const [],
     this.chatUsers = const [],
@@ -51,6 +63,10 @@ class AppState extends Equatable {
     this.moderatorUser = const [],
     this.forums = const [],
     this.allUsers = const [],
+    this.books = const [],
+    this.booksCategory = const [],
+    this.statistics = const StatisticsModel(),
+    this.regionStatistics = const RegionStatisticsModel(),
   });
 
   @override
@@ -67,6 +83,8 @@ class AppState extends Equatable {
     statusChatMessage,
     statusAllUsers,
     statusCreate,
+    statusBooks,
+    statusBooksCategory,
     chatMessage,
     chatGroup,
     chatUsers,
@@ -79,6 +97,10 @@ class AppState extends Equatable {
     moderatorUser,
     forums,
     allUsers,
+    books,
+    booksCategory,
+    statistics,
+    regionStatistics,
   ];
 
   AppState copyWith({
@@ -94,6 +116,10 @@ class AppState extends Equatable {
     FormzSubmissionStatus? statusChatMessage,
     FormzSubmissionStatus? statusAllUsers,
     FormzSubmissionStatus? statusCreate,
+    FormzSubmissionStatus? statusBooks,
+    FormzSubmissionStatus? statusBooksCategory,
+    FormzSubmissionStatus? statusStatistics,
+    FormzSubmissionStatus? statusRegionStatistics,
     List<ContentModel>? contentList,
     List<ChatGroupModel>? chatGroup,
     List<GraduateUserModel>? graduateUser,
@@ -106,6 +132,10 @@ class AppState extends Equatable {
     List<ChatMessageModel>? chatMessage,
     List<AllUserModel>? chatUsers,
     List<AllUserModel>? allUsers,
+    List<BooksModel>? books,
+    List<BooksCategoryModel>? booksCategory,
+    StatisticsModel? statistics,
+    RegionStatisticsModel? regionStatistics,
   }) {
     return AppState(
       statusForum: statusForum ?? this.statusForum,
@@ -120,6 +150,11 @@ class AppState extends Equatable {
       statusChatMessage: statusChatMessage ?? this.statusChatMessage,
       statusAllUsers: statusAllUsers ?? this.statusAllUsers,
       statusCreate: statusCreate ?? this.statusCreate,
+      statusBooks: statusBooks ?? this.statusBooks,
+      statusBooksCategory: statusBooksCategory ?? this.statusBooksCategory,
+      statusStatistics: statusStatistics ?? this.statusStatistics,
+      statusRegionStatistics:
+          statusRegionStatistics ?? this.statusRegionStatistics,
       contentList: contentList ?? this.contentList,
       chatGroup: chatGroup ?? this.chatGroup,
       graduateUser: graduateUser ?? this.graduateUser,
@@ -132,6 +167,10 @@ class AppState extends Equatable {
       chatMessage: chatMessage ?? this.chatMessage,
       chatUsers: chatUsers ?? this.chatUsers,
       allUsers: allUsers ?? this.allUsers,
+      books: books ?? this.books,
+      booksCategory: booksCategory ?? this.booksCategory,
+      statistics: statistics ?? this.statistics,
+      regionStatistics: regionStatistics ?? this.regionStatistics,
     );
   }
 }

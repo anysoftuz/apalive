@@ -5,11 +5,23 @@ part 'respons_model.g.dart';
 @JsonSerializable(genericArgumentFactories: true)
 class ResponsModel<T> {
   @JsonKey(name: "status_code")
-  final int statusCode;
+  final int? statusCode;
+  @JsonKey(name: "count")
+  final int? count;
+  @JsonKey(name: "next")
+  final String? next;
+  @JsonKey(name: "previous")
+  final String? previous;
   @JsonKey(name: "data")
   final T data;
 
-  ResponsModel({required this.statusCode, required this.data});
+  ResponsModel({
+    this.statusCode,
+    this.count,
+    this.next,
+    this.previous,
+    required this.data,
+  });
 
   /// JSON dan obyektni yaratish
   factory ResponsModel.fromJson(

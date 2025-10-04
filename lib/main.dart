@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create:
-              (context) => serviceLocator<AuthBloc>()..add(CheckUserEvent()),
+          create: (context) =>
+              serviceLocator<AuthBloc>()..add(CheckUserEvent()),
         ),
         BlocProvider(create: (context) => serviceLocator<AppBloc>()),
         ChangeNotifierProvider(create: (_) => JitsiProvider()),
@@ -74,24 +74,23 @@ class MyApp extends StatelessWidget {
           ),
         ),
         routerConfig: AppRouts.router,
-        builder:
-            (context, child) => BlocListener<AuthBloc, AuthState>(
-              listener: (context, state) {
-                debugPrint('STATE LISTENER ============> //${state.status}');
-                switch (state.status) {
-                  case AuthenticationStatus.unauthenticated:
-                    AppRouts.router.pushReplacement(AppRouteName.auth);
-                    break;
-                  case AuthenticationStatus.authenticated:
-                    AppRouts.router.go(AppRouteName.home);
-                    break;
-                  case AuthenticationStatus.loading:
-                  case AuthenticationStatus.cancelLoading:
-                    break;
-                }
-              },
-              child: KeyboardDismisser(child: child),
-            ),
+        builder: (context, child) => BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            debugPrint('STATE LISTENER ============> //${state.status}');
+            switch (state.status) {
+              case AuthenticationStatus.unauthenticated:
+                AppRouts.router.pushReplacement(AppRouteName.auth);
+                break;
+              case AuthenticationStatus.authenticated:
+                AppRouts.router.go(AppRouteName.home);
+                break;
+              case AuthenticationStatus.loading:
+              case AuthenticationStatus.cancelLoading:
+                break;
+            }
+          },
+          child: KeyboardDismisser(child: child),
+        ),
       ),
     );
   }

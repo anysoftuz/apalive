@@ -1,5 +1,7 @@
+import 'package:apalive/app/bloc/app_bloc.dart';
 import 'package:apalive/assets/colors/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
 
 class UzbMap extends StatefulWidget {
@@ -11,22 +13,22 @@ class UzbMap extends StatefulWidget {
 
 class _UzbMapState extends State<UzbMap> {
   late MapShapeSource _mapSource;
-  int _selectedIndex = -1;
+  int _selectedIndex = 0;
 
   final List<_RegionData> _regions = [
-    _RegionData('Tashkent', 0),
+    _RegionData('Toshkent', 0),
     _RegionData('Andijon', 1),
-    _RegionData('Ferghana', 2),
+    _RegionData('Farg‘ona', 2),
     _RegionData('Namangan', 3),
-    _RegionData('Bukhoro', 4),
-    _RegionData('Samarkand', 5),
-    _RegionData('Khorezm', 6),
-    _RegionData('Navoi', 7),
-    _RegionData('Surkhandarya', 8),
-    _RegionData('Kashkadarya', 9),
-    _RegionData('Jizzakh', 10),
+    _RegionData('Buxoro', 4),
+    _RegionData('Samarqand', 5),
+    _RegionData('Xorazm', 6),
+    _RegionData('Navoiy', 7),
+    _RegionData('Surxondaryo', 8),
+    _RegionData('Qashqadaryo', 9),
+    _RegionData('Jizzax', 10),
     _RegionData('Sirdaryo', 11),
-    _RegionData('Karakalpakstan', 12),
+    _RegionData("Qoraqalpog‘iston", 12),
   ];
 
   @override
@@ -59,6 +61,7 @@ class _UzbMapState extends State<UzbMap> {
                 setState(() {
                   _selectedIndex = index;
                 });
+                context.read<AppBloc>().add(RegionStatisticsEvent(region: _regions[index].name));
               },
               selectionSettings: MapSelectionSettings(
                 color: blue,

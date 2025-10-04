@@ -5,7 +5,7 @@ import 'package:apalive/data/models/all_user_model.dart';
 import 'package:apalive/data/models/chat_group_model.dart';
 import 'package:apalive/presentation/views/chats/chat_view.dart';
 import 'package:apalive/presentation/views/chats/create_chat_users_view.dart';
-import 'package:apalive/presentation/widgets/custom_text_field.dart';
+import 'package:apalive/presentation/widgets/w_button.dart';
 import 'package:apalive/presentation/widgets/w_scale_animation.dart';
 import 'package:apalive/presentation/widgets/w_tabbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -65,16 +65,16 @@ class _ChatsViewState extends State<ChatsView> {
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size(double.infinity, 60),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-            child: CustomTextField(
-              hintText: 'Qidirish',
-              prefixIcon: AppIcons.search.svg(),
-            ),
-          ),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: Size(double.infinity, 60),
+        //   child: Padding(
+        //     padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+        //     child: CustomTextField(
+        //       hintText: 'Qidirish',
+        //       prefixIcon: AppIcons.search.svg(),
+        //     ),
+        //   ),
+        // ),
       ),
 
       // body: BlocBuilder<AppBloc, AppState>(
@@ -101,7 +101,10 @@ class _ChatsViewState extends State<ChatsView> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               margin: EdgeInsets.only(bottom: 8),
               child: WTabBar(
-                tabs: [Tab(text: 'Chatlar'), Tab(text: 'Guruhlar')],
+                tabs: [
+                  Tab(text: 'Chatlar'),
+                  Tab(text: 'Guruhlar'),
+                ],
               ),
             ),
             Expanded(
@@ -114,13 +117,38 @@ class _ChatsViewState extends State<ChatsView> {
                           child: CircularProgressIndicator.adaptive(),
                         );
                       }
+                      if (state.chatUsers.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AppIcons.inbox.svg(height: 160, width: 160),
+                              SizedBox(height: 12),
+                              Text(
+                                'Chatlar mavjud emas',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 32),
+                              WButton(
+                                width: 200,
+                                onTap: () {
+                                  context.read<AppBloc>().add(ChatUsersEvent());
+                                },
+                                text: 'Qayta yuklash',
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                       return ListView.separated(
                         padding: EdgeInsets.symmetric(vertical: 16),
-                        itemBuilder:
-                            (context, index) =>
-                                ChatUserIteam(model: state.chatUsers[index]),
-                        separatorBuilder:
-                            (context, index) => Divider(height: 32),
+                        itemBuilder: (context, index) =>
+                            ChatUserIteam(model: state.chatUsers[index]),
+                        separatorBuilder: (context, index) =>
+                            Divider(height: 32),
                         itemCount: state.chatUsers.length,
                       );
                     },
@@ -132,13 +160,38 @@ class _ChatsViewState extends State<ChatsView> {
                           child: CircularProgressIndicator.adaptive(),
                         );
                       }
+                      if (state.chatGroup.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AppIcons.inbox.svg(height: 160, width: 160),
+                              SizedBox(height: 12),
+                              Text(
+                                'Chatlar mavjud emas',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 32),
+                              WButton(
+                                width: 200,
+                                onTap: () {
+                                  context.read<AppBloc>().add(ChatGroupEvent());
+                                },
+                                text: 'Qayta yuklash',
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                       return ListView.separated(
                         padding: EdgeInsets.symmetric(vertical: 16),
-                        itemBuilder:
-                            (context, index) =>
-                                ChatIteam(model: state.chatGroup[index]),
-                        separatorBuilder:
-                            (context, index) => Divider(height: 32),
+                        itemBuilder: (context, index) =>
+                            ChatIteam(model: state.chatGroup[index]),
+                        separatorBuilder: (context, index) =>
+                            Divider(height: 32),
                         itemCount: state.chatGroup.length,
                       );
                     },
@@ -164,14 +217,13 @@ class ChatIteam extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder:
-                (context) => ChatView(
-                  guid: model.guid,
-                  photo: model.logo,
-                  name: model.name,
-                  isGroup: true,
-                  userid: model.id,
-                ),
+            builder: (context) => ChatView(
+              guid: model.guid,
+              photo: model.logo,
+              name: model.name,
+              isGroup: true,
+              userid: model.id,
+            ),
           ),
         );
       },
@@ -214,14 +266,13 @@ class ChatUserIteam extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder:
-                (context) => ChatView(
-                  guid: model.guid,
-                  photo: model.photo,
-                  name: model.fullName,
-                  isGroup: false,
-                  userid: model.id,
-                ),
+            builder: (context) => ChatView(
+              guid: model.guid,
+              photo: model.photo,
+              name: model.fullName,
+              isGroup: false,
+              userid: model.id,
+            ),
           ),
         );
       },

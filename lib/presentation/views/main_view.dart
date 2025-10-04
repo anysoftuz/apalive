@@ -57,11 +57,11 @@ class _MainViewState extends State<MainView> {
               activeIcon: AppIcons.video.svg(color: Color(0xFF003B81)),
               label: 'Meets',
             ),
-            BottomNavigationBarItem(
-              icon: AppIcons.archive.svg(color: Color(0xFF535862)),
-              activeIcon: AppIcons.archive.svg(color: Color(0xFF003B81)),
-              label: 'Blog',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: AppIcons.archive.svg(color: Color(0xFF535862)),
+            //   activeIcon: AppIcons.archive.svg(color: Color(0xFF003B81)),
+            //   label: 'Blog',
+            // ),
             // BottomNavigationBarItem(
             //   icon: AppIcons.userGroup.svg(
             //     color: Color(0xFF535862),

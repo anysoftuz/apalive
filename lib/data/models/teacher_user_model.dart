@@ -12,18 +12,18 @@ class TeacherUserModel {
   final String username;
   @JsonKey(name: "password")
   final String password;
+  @JsonKey(name: "photo")
+  final dynamic photo;
   @JsonKey(name: "name")
   final String name;
   @JsonKey(name: "middle_name")
   final String middleName;
   @JsonKey(name: "surname")
   final String surname;
-  @JsonKey(name: "photo")
-  final String photo;
   @JsonKey(name: "academic_degree")
-  final List<int> academicDegree;
+  final List<AcademicDegree> academicDegree;
   @JsonKey(name: "character_traits")
-  final List<int> characterTraits;
+  final List<AcademicDegree> characterTraits;
   @JsonKey(name: "passport_series")
   final String passportSeries;
   @JsonKey(name: "birth_date")
@@ -50,6 +50,7 @@ class TeacherUserModel {
     required this.guid,
     required this.username,
     required this.password,
+    required this.photo,
     required this.name,
     required this.middleName,
     required this.surname,
@@ -65,11 +66,37 @@ class TeacherUserModel {
     required this.email,
     required this.createdBy,
     required this.deletedBy,
-    this.photo = '',
   });
 
   factory TeacherUserModel.fromJson(Map<String, dynamic> json) =>
       _$TeacherUserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$TeacherUserModelToJson(this);
+}
+
+@JsonSerializable()
+class AcademicDegree {
+  @JsonKey(name: "id")
+  final int id;
+  @JsonKey(name: "guid")
+  final String guid;
+  @JsonKey(name: "title")
+  final String title;
+  @JsonKey(name: "created_by")
+  final dynamic createdBy;
+  @JsonKey(name: "deleted_by")
+  final dynamic deletedBy;
+
+  AcademicDegree({
+    required this.id,
+    required this.guid,
+    required this.title,
+    required this.createdBy,
+    required this.deletedBy,
+  });
+
+  factory AcademicDegree.fromJson(Map<String, dynamic> json) =>
+      _$AcademicDegreeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AcademicDegreeToJson(this);
 }

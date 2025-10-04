@@ -2,11 +2,16 @@ import 'dart:io';
 
 import 'package:apalive/assets/constants/storage_keys.dart';
 import 'package:apalive/data/models/all_user_model.dart';
+import 'package:apalive/data/models/books/books_category_model.dart';
+import 'package:apalive/data/models/books/books_model.dart';
 import 'package:apalive/data/models/chat_group_model.dart';
 import 'package:apalive/data/models/chat_message_model.dart';
+import 'package:apalive/data/models/common/filter_model.dart';
 import 'package:apalive/data/models/content_model.dart';
 import 'package:apalive/data/models/forum/forums_model.dart';
 import 'package:apalive/data/models/graduate_user_model.dart';
+import 'package:apalive/data/models/home/region_statistics_model.dart';
+import 'package:apalive/data/models/home/statistics_model.dart';
 import 'package:apalive/data/models/moderator_user_model.dart';
 import 'package:apalive/data/models/news_model.dart';
 import 'package:apalive/data/models/teacher_user_model.dart';
@@ -26,15 +31,88 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   final ApiRepo _repo;
   AppBloc(this._repo) : super(AppState()) {
+    on<StatisticsEvent>((event, emit) async {
+      emit(state.copyWith(statusStatistics: FormzSubmissionStatus.inProgress));
+      final response = await _repo.statistics();
+      if (response.isRight) {
+        emit(
+          state.copyWith(
+            statusStatistics: FormzSubmissionStatus.success,
+            statistics: response.right.data,
+          ),
+        );
+      } else {
+        emit(state.copyWith(statusStatistics: FormzSubmissionStatus.failure));
+      }
+    });
+
+    on<RegionStatisticsEvent>((event, emit) async {
+      emit(
+        state.copyWith(
+          statusRegionStatistics: FormzSubmissionStatus.inProgress,
+        ),
+      );
+      final response = await _repo.regionStatistics(event.region);
+      if (response.isRight) {
+        emit(
+          state.copyWith(
+            statusRegionStatistics: FormzSubmissionStatus.success,
+            regionStatistics: response.right.data,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(statusRegionStatistics: FormzSubmissionStatus.failure),
+        );
+      }
+    });
+
+    on<BooksCategoryEvent>((event, emit) async {
+      emit(
+        state.copyWith(statusBooksCategory: FormzSubmissionStatus.inProgress),
+      );
+      final response = await _repo.getBooksCategory();
+      if (response.isRight) {
+        emit(
+          state.copyWith(
+            statusBooksCategory: FormzSubmissionStatus.success,
+            booksCategory: response.right.data,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(statusBooksCategory: FormzSubmissionStatus.failure),
+        );
+      }
+    });
+
+    on<BooksEvent>((event, emit) async {
+      emit(state.copyWith(statusBooks: FormzSubmissionStatus.inProgress));
+      FilterModel filter = FilterModel(
+        search: event.search,
+        categoryId: event.categoryId,
+      );
+      final response = await _repo.getBooks(filter);
+      if (response.isRight) {
+        emit(
+          state.copyWith(
+            statusBooks: FormzSubmissionStatus.success,
+            books: response.right.data,
+          ),
+        );
+      } else {
+        emit(state.copyWith(statusBooks: FormzSubmissionStatus.failure));
+      }
+    });
+
     on<CreateChatEvent>((event, emit) async {
       emit(state.copyWith(statusCreate: FormzSubmissionStatus.inProgress));
       final response = await _repo.chatGroupCreate(
         FormData.fromMap({
           'name': event.name,
-          'logo':
-              event.images != null
-                  ? await MultipartFile.fromFile(event.images!.path)
-                  : event.images,
+          'logo': event.images != null
+              ? await MultipartFile.fromFile(event.images!.path)
+              : event.images,
         }),
       );
       if (response.isRight) {

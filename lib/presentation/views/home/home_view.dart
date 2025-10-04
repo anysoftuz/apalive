@@ -1,4 +1,5 @@
 import 'package:apalive/app/auth/auth_bloc.dart';
+import 'package:apalive/app/bloc/app_bloc.dart';
 import 'package:apalive/assets/colors/colors.dart';
 import 'package:apalive/assets/icons/icons.dart';
 import 'package:apalive/presentation/views/chats/chats_view.dart';
@@ -16,69 +17,75 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   @override
+  void initState() {
+    super.initState();
+    context.read<AppBloc>().add(StatisticsEvent());
+    context.read<AppBloc>().add(RegionStatisticsEvent(region: 'Toshkent'));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
         title: BlocBuilder<AuthBloc, AuthState>(
-          builder:
-              (context, state) => Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(48),
-                  border: Border.all(color: borderColor),
+          builder: (context, state) => Container(
+            height: 48,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(48),
+              border: Border.all(color: borderColor),
+            ),
+            padding: EdgeInsets.all(4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: white,
+                        backgroundImage: NetworkImage(
+                          state.userModel.photo.isEmpty
+                              ? "https://academy.rudn.ru/static/images/profile_default.png"
+                              : state.userModel.photo,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: AppIcons.verifiedTick.svg(),
+                      ),
+                    ],
+                  ),
                 ),
-                padding: EdgeInsets.all(4),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 8,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundColor: white,
-                            backgroundImage: NetworkImage(
-                              state.userModel.photo.isEmpty
-                                  ? "https://academy.rudn.ru/static/images/profile_default.png"
-                                  : state.userModel.photo,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: AppIcons.verifiedTick.svg(),
-                          ),
-                        ],
+                    Text(
+                      "${state.userModel.name.isEmpty ? "Shahina" : state.userModel.name} ${state.userModel.surname.isEmpty ? "Usmanova" : state.userModel.surname} ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${state.userModel.name.isEmpty ? "Shahina" : state.userModel.name} ${state.userModel.surname.isEmpty ? "Usmanova" : state.userModel.surname} ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          'Hush kelibsiz!',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Hush kelibsiz!',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    SizedBox(width: 16),
                   ],
                 ),
-              ),
+                SizedBox(width: 16),
+              ],
+            ),
+          ),
         ),
         actions: [
           GestureDetector(
@@ -125,52 +132,58 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              spacing: 12,
-              children: [
-                HomeInfoContainer(
-                  title: '3 000',
-                  subtitle: 'O’qituvchilar',
-                  icon: AppIcons.teaching.svg(),
-                ),
-                HomeInfoContainer(
-                  title: '2 200',
-                  subtitle: 'Bitiruvchilar',
-                  icon: AppIcons.mortarboard.svg(),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Row(
-              spacing: 12,
-              children: [
-                HomeInfoContainer(
-                  title: '2 000',
-                  subtitle: 'Magistratura',
-                  icon: AppIcons.graduationScroll.svg(),
-                ),
-                HomeInfoContainer(
-                  title: '2 200',
-                  subtitle: 'Doktarantura',
-                  icon: AppIcons.knowledge.svg(),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Row(
-              spacing: 12,
-              children: [
-                HomeInfoContainer(
-                  title: '3 000',
-                  subtitle: 'Malaka oshirish',
-                  icon: AppIcons.book.svg(),
-                ),
-                HomeInfoContainer(
-                  title: '2 200',
-                  subtitle: 'Qayta tayyorlash',
-                  icon: AppIcons.diploma.svg(),
-                ),
-              ],
+            BlocBuilder<AppBloc, AppState>(
+              builder: (context, state) => Column(
+                children: [
+                  Row(
+                    spacing: 12,
+                    children: [
+                      HomeInfoContainer(
+                        title: state.statistics.teachers.toString(),
+                        subtitle: 'O’qituvchilar',
+                        icon: AppIcons.teaching.svg(),
+                      ),
+                      HomeInfoContainer(
+                        title: state.statistics.graduates.total.toString(),
+                        subtitle: 'Bitiruvchilar',
+                        icon: AppIcons.mortarboard.svg(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    spacing: 12,
+                    children: [
+                      HomeInfoContainer(
+                        title: state.statistics.graduates.masters.toString(),
+                        subtitle: 'Magistratura',
+                        icon: AppIcons.graduationScroll.svg(),
+                      ),
+                      HomeInfoContainer(
+                        title: state.statistics.graduates.phd.toString(),
+                        subtitle: 'Doktarantura',
+                        icon: AppIcons.knowledge.svg(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    spacing: 12,
+                    children: [
+                      HomeInfoContainer(
+                        title: state.statistics.graduates.training.toString(),
+                        subtitle: 'Malaka oshirish',
+                        icon: AppIcons.book.svg(),
+                      ),
+                      HomeInfoContainer(
+                        title: state.statistics.graduates.retraining.toString(),
+                        subtitle: 'Qayta tayyorlash',
+                        icon: AppIcons.diploma.svg(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             Text(
@@ -186,61 +199,79 @@ class _HomeViewState extends State<HomeView> {
                 borderRadius: BorderRadius.circular(16),
                 color: Color(0xFFF5F5F5),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Toshkent viloyati',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 8),
-                  HomeRowInfo(title: 'Bitiruchilar:', subtitle: '23 560'),
-                  SizedBox(height: 4),
-                  HomeRowInfo(title: 'Erkaklar:', subtitle: '5 127'),
-                  SizedBox(height: 4),
-                  HomeRowInfo(title: 'Ayollar:', subtitle: '17 571'),
-                ],
+              child: BlocBuilder<AppBloc, AppState>(
+                builder: (context, state) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      state.regionStatistics.region,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    HomeRowInfo(
+                      title: 'Bitiruchilar:',
+                      subtitle: state.regionStatistics.statistics.total
+                          .toString(),
+                    ),
+                    SizedBox(height: 4),
+                    HomeRowInfo(
+                      title: 'Erkaklar:',
+                      subtitle: state.regionStatistics.statistics.gender.male
+                          .toString(),
+                    ),
+                    SizedBox(height: 4),
+                    HomeRowInfo(
+                      title: 'Ayollar:',
+                      subtitle: state.regionStatistics.statistics.gender.female
+                          .toString(),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 12),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Color(0xFFF5F5F5),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 12,
-                children: [
-                  HomeRowInfo(
-                    title: 'Jami bitiruvchilar',
-                    subtitle: '12 571 nafar',
-                    fontSize: 16,
-                  ),
-                  HomeRowInfo(
-                    title: 'Magistratura',
-                    subtitle: '12 571 nafar',
-                    fontSize: 16,
-                  ),
-                  HomeRowInfo(
-                    title: 'Doktarantura',
-                    subtitle: '12 571 nafar',
-                    fontSize: 16,
-                  ),
-                  HomeRowInfo(
-                    title: 'Malaka oshirish',
-                    subtitle: '12 571 nafar',
-                    fontSize: 16,
-                  ),
-                  HomeRowInfo(
-                    title: 'Qayta tayyorlash',
-                    subtitle: '12 571 nafar',
-                    fontSize: 16,
-                  ),
-                ],
-              ),
-            ),
+
+            // Container(
+            //   padding: EdgeInsets.all(16),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(16),
+            //     color: Color(0xFFF5F5F5),
+            //   ),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     spacing: 12,
+            //     children: [
+            //       HomeRowInfo(
+            //         title: 'Jami bitiruvchilar',
+            //         subtitle: '12 571 nafar',
+            //         fontSize: 16,
+            //       ),
+            //       HomeRowInfo(
+            //         title: 'Magistratura',
+            //         subtitle: '12 571 nafar',
+            //         fontSize: 16,
+            //       ),
+            //       HomeRowInfo(
+            //         title: 'Doktarantura',
+            //         subtitle: '12 571 nafar',
+            //         fontSize: 16,
+            //       ),
+            //       HomeRowInfo(
+            //         title: 'Malaka oshirish',
+            //         subtitle: '12 571 nafar',
+            //         fontSize: 16,
+            //       ),
+            //       HomeRowInfo(
+            //         title: 'Qayta tayyorlash',
+            //         subtitle: '12 571 nafar',
+            //         fontSize: 16,
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
