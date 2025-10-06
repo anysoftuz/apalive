@@ -1,3 +1,4 @@
+import 'package:apalive/app/bloc/app_bloc.dart';
 import 'package:apalive/assets/colors/colors.dart';
 import 'package:apalive/assets/icons/icons.dart';
 import 'package:apalive/assets/images/images.dart';
@@ -5,7 +6,10 @@ import 'package:apalive/data/models/graduate_user_model.dart';
 import 'package:apalive/presentation/views/chats/chat_view.dart';
 import 'package:apalive/presentation/widgets/w_scale_animation.dart';
 import 'package:apalive/utils/log_service.dart';
+import 'package:apalive/utils/my_function.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GraduatesInfoView extends StatefulWidget {
@@ -17,6 +21,109 @@ class GraduatesInfoView extends StatefulWidget {
 }
 
 class _GraduatesInfoViewState extends State<GraduatesInfoView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AppBloc>().add(EmploymentEvent(pinfl: widget.model.jshshir));
+  }
+
+  Widget _buildEmploymentInfo() {
+    return BlocBuilder<AppBloc, AppState>(
+      builder: (context, state) {
+        if (state.statusEmployment == FormzSubmissionStatus.inProgress) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state.statusEmployment == FormzSubmissionStatus.failure) {
+          return Text('Ish haqida ma\'lumot yuklanmadi');
+        } else if (state.employment.isEmpty) {
+          return SizedBox.shrink();
+        }
+
+        // Define the columns we want to show
+        final columns = [
+          'Ish joyi',
+          'Ishga kirgan sana',
+          'ISHDAN KETGAN SANA',
+          'LAVOZIMI',
+          'TASHKILOT MANZILI',
+        ];
+
+        // Create a list of all employment records with requested fields
+        final List<Map<String, String>> employmentData = state.employment.map((
+          emp,
+        ) {
+          return {
+            'Ish joyi': emp.employerName,
+            'Ishga kirgan sana': MyFunction.formatDate(emp.hiredAt),
+            'ISHDAN KETGAN SANA': emp.firedAt?.isNotEmpty == true
+                ? MyFunction.formatDate(emp.firedAt!)
+                : '-',
+            'LAVOZIMI': emp.position,
+            'TASHKILOT MANZILI': emp.payload.workplaceAddress ?? '',
+          };
+        }).toList();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16),
+            Text(
+              "Ish haqida ma'lumotlar",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  border: TableBorder.all(
+                    color: backGroundColor,
+                    width: 1,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  headingTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  headingRowColor: WidgetStateProperty.all(
+                    Color.fromARGB(255, 242, 242, 243),
+                  ),
+                  columns: columns
+                      .map(
+                        (column) => DataColumn(
+                          label: Text(
+                            column,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  rows: employmentData.map((emp) {
+                    return DataRow(
+                      cells: columns.map((column) {
+                        return DataCell(
+                          Text(
+                            emp[column]?.isNotEmpty == true
+                                ? emp[column]!
+                                : '-',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,14 +209,13 @@ class _GraduatesInfoViewState extends State<GraduatesInfoView> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder:
-                                    (context) => ChatView(
-                                      guid: widget.model.guid,
-                                      photo: '',
-                                      name: widget.model.name,
-                                      isGroup: false,
-                                      userid: widget.model.id,
-                                    ),
+                                builder: (context) => ChatView(
+                                  guid: widget.model.guid,
+                                  photo: '',
+                                  name: widget.model.name,
+                                  isGroup: false,
+                                  userid: widget.model.id,
+                                ),
                               ),
                             );
                           },
@@ -234,88 +340,159 @@ class _GraduatesInfoViewState extends State<GraduatesInfoView> {
                           .join(', '),
                     ),
                   ],
+                  SizedBox(height: 8),
+                  UserInfoIteam(
+                    title: 'Tug\'ilgan sana',
+                    subtitle: widget.model.birthDate.isNotEmpty
+                        ? widget.model.birthDate
+                        : 'Mavjud emas',
+                  ),
+                  SizedBox(height: 8),
+                  UserInfoIteam(
+                    title: 'Jinsi',
+                    subtitle: widget.model.gender.isNotEmpty
+                        ? widget.model.gender
+                        : 'Mavjud emas',
+                  ),
+                  SizedBox(height: 8),
+                  UserInfoIteam(
+                    title: 'Viloyat',
+                    subtitle: widget.model.region.isNotEmpty
+                        ? widget.model.region
+                        : 'Mavjud emas',
+                  ),
+                  if (widget.model.degree.isNotEmpty) ...[
+                    SizedBox(height: 8),
+                    UserInfoIteam(
+                      title: 'Darajasi',
+                      subtitle: widget.model.degree
+                          .map((e) => e.title)
+                          .toList()
+                          .join(', '),
+                    ),
+                  ],
+                  if (widget.model.eduForm.isNotEmpty) ...[
+                    SizedBox(height: 8),
+                    UserInfoIteam(
+                      title: 'Ta\'lim shakli',
+                      subtitle: widget.model.eduForm
+                          .map((e) => e.title)
+                          .toList()
+                          .join(', '),
+                    ),
+                  ],
+                  if (widget.model.faculty.isNotEmpty) ...[
+                    SizedBox(height: 8),
+                    UserInfoIteam(
+                      title: 'Fakultet',
+                      subtitle: widget.model.faculty,
+                    ),
+                  ],
+                  if (widget.model.specialty.isNotEmpty) ...[
+                    SizedBox(height: 8),
+                    UserInfoIteam(
+                      title: 'Mutaxassislik',
+                      subtitle: widget.model.specialty,
+                    ),
+                  ],
+                  SizedBox(height: 8),
+                  UserInfoIteam(
+                    title: 'O\'qishga kirgan yili',
+                    subtitle: widget.model.yearOfEntrance.isNotEmpty
+                        ? widget.model.yearOfEntrance
+                        : 'Mavjud emas',
+                  ),
+                  SizedBox(height: 8),
+                  UserInfoIteam(
+                    title: 'Bitirgan yili',
+                    subtitle: widget.model.yearOfGraduation.isNotEmpty
+                        ? widget.model.yearOfGraduation
+                        : 'Mavjud emas',
+                  ),
+                  _buildEmploymentInfo(),
 
-                  SizedBox(height: 16),
-                  Text(
-                    "Postlar",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    "Bitiruvchining erishgan shaxsiy va kasbiy yutuqlari haqida batafsil ma’lumot",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-                  ),
+                  // SizedBox(height: 16),
+                  // Text(
+                  //   "Postlar",
+                  //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  // ),
+                  // SizedBox(height: 2),
+                  // Text(
+                  //   "Bitiruvchining erishgan shaxsiy va kasbiy yutuqlari haqida batafsil ma’lumot",
+                  //   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  // ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 372,
-              width: double.infinity,
-              child: ListView.separated(
-                itemBuilder:
-                    (context, index) => Container(
-                      padding: EdgeInsets.all(16),
-                      width: 268,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: borderColor),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 156,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: blue,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Yangi texnologiyalar va innovatsiyalar – bizning bitiruvchilar ishtirokida',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: textPrimary900,
-                            ),
-                            maxLines: 3,
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            'Yangi texnologiyalar va innovatsiyalar – bizning bitiruvchilar ishtirokida',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: textPrimary900,
-                            ),
-                            maxLines: 3,
-                          ),
-                          Spacer(),
-                          Row(
-                            spacing: 12,
-                            children: [
-                              CircleAvatar(radius: 20),
-                              Expanded(
-                                child: Text(
-                                  'AZIMOV BEKMIRZA RAHIMOVICH',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                separatorBuilder: (context, index) => SizedBox(width: 12),
-                itemCount: 12,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-            SizedBox(height: 8),
+
+            // SizedBox(
+            //   height: 372,
+            //   width: double.infinity,
+            //   child: ListView.separated(
+            //     itemBuilder:
+            //         (context, index) => Container(
+            //           padding: EdgeInsets.all(16),
+            //           width: 268,
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(16),
+            //             border: Border.all(color: borderColor),
+            //           ),
+            //           child: Column(
+            //             children: [
+            //               Container(
+            //                 height: 156,
+            //                 width: double.infinity,
+            //                 decoration: BoxDecoration(
+            //                   borderRadius: BorderRadius.circular(12),
+            //                   color: blue,
+            //                 ),
+            //               ),
+            //               SizedBox(height: 8),
+            //               Text(
+            //                 'Yangi texnologiyalar va innovatsiyalar – bizning bitiruvchilar ishtirokida',
+            //                 style: TextStyle(
+            //                   fontWeight: FontWeight.w600,
+            //                   fontSize: 15,
+            //                   color: textPrimary900,
+            //                 ),
+            //                 maxLines: 3,
+            //               ),
+            //               SizedBox(height: 4),
+            //               Text(
+            //                 'Yangi texnologiyalar va innovatsiyalar – bizning bitiruvchilar ishtirokida',
+            //                 style: TextStyle(
+            //                   fontWeight: FontWeight.w400,
+            //                   fontSize: 12,
+            //                   color: textPrimary900,
+            //                 ),
+            //                 maxLines: 3,
+            //               ),
+            //               Spacer(),
+            //               Row(
+            //                 spacing: 12,
+            //                 children: [
+            //                   CircleAvatar(radius: 20),
+            //                   Expanded(
+            //                     child: Text(
+            //                       'AZIMOV BEKMIRZA RAHIMOVICH',
+            //                       style: TextStyle(
+            //                         fontWeight: FontWeight.w600,
+            //                         fontSize: 16,
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //     separatorBuilder: (context, index) => SizedBox(width: 12),
+            //     itemCount: 12,
+            //     padding: EdgeInsets.symmetric(horizontal: 16),
+            //     scrollDirection: Axis.horizontal,
+            //   ),
+            // ),
+            // SizedBox(height: 8),
             Container(
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.all(16),

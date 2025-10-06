@@ -7,6 +7,7 @@ import 'package:apalive/data/models/chat_message_model.dart';
 import 'package:apalive/data/models/common/filter_model.dart';
 import 'package:apalive/data/models/common/respons_model.dart';
 import 'package:apalive/data/models/content_model.dart';
+import 'package:apalive/data/models/employment_model.dart';
 import 'package:apalive/data/models/forum/forums_model.dart';
 import 'package:apalive/data/models/graduate_user_model.dart';
 import 'package:apalive/data/models/home/region_statistics_model.dart';
@@ -301,8 +302,9 @@ class ApiRepo implements IApiRepo {
   }
 
   @override
-  Future<Either<Failure, ResponsModel<RegionStatisticsModel>>>
-  regionStatistics(String region) async {
+  Future<Either<Failure, ResponsModel<RegionStatisticsModel>>> regionStatistics(
+    String region,
+  ) async {
     try {
       final result = await dataSourcheImpl.regionStatistics(region);
       return Right(result);
@@ -321,6 +323,24 @@ class ApiRepo implements IApiRepo {
   Future<Either<Failure, ResponsModel<StatisticsModel>>> statistics() async {
     try {
       final result = await dataSourcheImpl.statistics();
+      return Right(result);
+    } on DioException {
+      return Left(DioFailure());
+    } on ParsingException catch (e) {
+      return Left(ParsingFailure(errorMessage: e.errorMessage));
+    } on ServerException catch (e) {
+      return Left(
+        ServerFailure(errorMessage: e.errorMessage, statusCode: e.statusCode),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResponsModel<List<EmploymentModel>>>> employment(
+    String pinfl,
+  ) async {
+    try {
+      final result = await dataSourcheImpl.employment(pinfl);
       return Right(result);
     } on DioException {
       return Left(DioFailure());

@@ -2,6 +2,12 @@ part of 'app_bloc.dart';
 
 sealed class AppEvent {}
 
+class EmploymentEvent extends AppEvent {
+  final String pinfl;
+
+  EmploymentEvent({required this.pinfl});
+}
+
 class StatisticsEvent extends AppEvent {}
 
 class RegionStatisticsEvent extends AppEvent {

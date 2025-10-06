@@ -148,15 +148,19 @@ class GraduatesIteam extends StatelessWidget {
                         : model.photo,
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${model.name} ${model.middleName} ${model.surname}',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    Text(model.phoneNumber),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${model.name} ${model.middleName} ${model.surname}',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(model.phoneNumber),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -43,6 +43,21 @@ GraduateUserModel _$GraduateUserModelFromJson(Map<String, dynamic> json) =>
           const [],
       createdBy: json['created_by'],
       deletedBy: json['deleted_by'],
+      region: json['region'] as String? ?? '',
+      yearOfEntrance: json['year_of_entrance'] as String? ?? '',
+      yearOfGraduation: json['year_of_graduation'] as String? ?? '',
+      degree:
+          (json['degree'] as List<dynamic>?)
+              ?.map((e) => AcademicDegree.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      eduForm:
+          (json['edu_form'] as List<dynamic>?)
+              ?.map((e) => AcademicDegree.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      faculty: json['faculty'] as String? ?? '',
+      specialty: json['specialty'] as String? ?? '',
     );
 
 Map<String, dynamic> _$GraduateUserModelToJson(GraduateUserModel instance) =>
@@ -51,6 +66,7 @@ Map<String, dynamic> _$GraduateUserModelToJson(GraduateUserModel instance) =>
       'guid': instance.guid,
       'username': instance.username,
       'password': instance.password,
+      'photo': instance.photo,
       'name': instance.name,
       'middle_name': instance.middleName,
       'surname': instance.surname,
@@ -59,13 +75,19 @@ Map<String, dynamic> _$GraduateUserModelToJson(GraduateUserModel instance) =>
       'jshshir': instance.jshshir,
       'gender': instance.gender,
       'phone_number': instance.phoneNumber,
+      'region': instance.region,
+      'year_of_entrance': instance.yearOfEntrance,
+      'year_of_graduation': instance.yearOfGraduation,
+      'degree': instance.degree,
+      'edu_form': instance.eduForm,
+      'faculty': instance.faculty,
+      'specialty': instance.specialty,
       'known_languages': instance.knownLanguages,
       'state_awards': instance.stateAwards,
       'academic_degree': instance.academicDegree,
       'character_traits': instance.characterTraits,
       'created_by': instance.createdBy,
       'deleted_by': instance.deletedBy,
-      'photo': instance.photo,
     };
 
 AcademicDegree _$AcademicDegreeFromJson(Map<String, dynamic> json) =>

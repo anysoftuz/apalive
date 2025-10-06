@@ -18,6 +18,7 @@ class AppState extends Equatable {
   final FormzSubmissionStatus statusBooksCategory;
   final FormzSubmissionStatus statusStatistics;
   final FormzSubmissionStatus statusRegionStatistics;
+  final FormzSubmissionStatus statusEmployment;
   final List<ContentModel> contentList;
   final List<ChatGroupModel> chatGroup;
   final List<GraduateUserModel> graduateUser;
@@ -34,6 +35,7 @@ class AppState extends Equatable {
   final List<BooksCategoryModel> booksCategory;
   final StatisticsModel statistics;
   final RegionStatisticsModel regionStatistics;
+  final List<EmploymentModel> employment;
   const AppState({
     this.statusForum = FormzSubmissionStatus.initial,
     this.statusModeratorUser = FormzSubmissionStatus.initial,
@@ -51,6 +53,7 @@ class AppState extends Equatable {
     this.statusBooksCategory = FormzSubmissionStatus.initial,
     this.statusStatistics = FormzSubmissionStatus.initial,
     this.statusRegionStatistics = FormzSubmissionStatus.initial,
+    this.statusEmployment = FormzSubmissionStatus.initial,
     this.chatMessage = const [],
     this.chatGroup = const [],
     this.chatUsers = const [],
@@ -67,6 +70,7 @@ class AppState extends Equatable {
     this.booksCategory = const [],
     this.statistics = const StatisticsModel(),
     this.regionStatistics = const RegionStatisticsModel(),
+    this.employment = const [],
   });
 
   @override
@@ -85,6 +89,7 @@ class AppState extends Equatable {
     statusCreate,
     statusBooks,
     statusBooksCategory,
+    statusStatistics,
     chatMessage,
     chatGroup,
     chatUsers,
@@ -101,6 +106,7 @@ class AppState extends Equatable {
     booksCategory,
     statistics,
     regionStatistics,
+    employment,
   ];
 
   AppState copyWith({
@@ -120,6 +126,7 @@ class AppState extends Equatable {
     FormzSubmissionStatus? statusBooksCategory,
     FormzSubmissionStatus? statusStatistics,
     FormzSubmissionStatus? statusRegionStatistics,
+    FormzSubmissionStatus? statusEmployment,
     List<ContentModel>? contentList,
     List<ChatGroupModel>? chatGroup,
     List<GraduateUserModel>? graduateUser,
@@ -136,6 +143,7 @@ class AppState extends Equatable {
     List<BooksCategoryModel>? booksCategory,
     StatisticsModel? statistics,
     RegionStatisticsModel? regionStatistics,
+    List<EmploymentModel>? employment,
   }) {
     return AppState(
       statusForum: statusForum ?? this.statusForum,
@@ -153,8 +161,8 @@ class AppState extends Equatable {
       statusBooks: statusBooks ?? this.statusBooks,
       statusBooksCategory: statusBooksCategory ?? this.statusBooksCategory,
       statusStatistics: statusStatistics ?? this.statusStatistics,
-      statusRegionStatistics:
-          statusRegionStatistics ?? this.statusRegionStatistics,
+      statusRegionStatistics: statusRegionStatistics ?? this.statusRegionStatistics,
+      statusEmployment: statusEmployment ?? this.statusEmployment,
       contentList: contentList ?? this.contentList,
       chatGroup: chatGroup ?? this.chatGroup,
       graduateUser: graduateUser ?? this.graduateUser,
@@ -171,6 +179,7 @@ class AppState extends Equatable {
       booksCategory: booksCategory ?? this.booksCategory,
       statistics: statistics ?? this.statistics,
       regionStatistics: regionStatistics ?? this.regionStatistics,
+      employment: employment ?? this.employment,
     );
   }
 }

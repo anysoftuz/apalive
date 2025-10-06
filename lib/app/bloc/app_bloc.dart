@@ -8,6 +8,7 @@ import 'package:apalive/data/models/chat_group_model.dart';
 import 'package:apalive/data/models/chat_message_model.dart';
 import 'package:apalive/data/models/common/filter_model.dart';
 import 'package:apalive/data/models/content_model.dart';
+import 'package:apalive/data/models/employment_model.dart';
 import 'package:apalive/data/models/forum/forums_model.dart';
 import 'package:apalive/data/models/graduate_user_model.dart';
 import 'package:apalive/data/models/home/region_statistics_model.dart';
@@ -31,6 +32,21 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   final ApiRepo _repo;
   AppBloc(this._repo) : super(AppState()) {
+    on<EmploymentEvent>((event, emit) async {
+      emit(state.copyWith(statusEmployment: FormzSubmissionStatus.inProgress));
+      final response = await _repo.employment(event.pinfl);
+      if (response.isRight) {
+        emit(
+          state.copyWith(
+            statusEmployment: FormzSubmissionStatus.success,
+            employment: response.right.data,
+          ),
+        );
+      } else {
+        emit(state.copyWith(statusEmployment: FormzSubmissionStatus.failure));
+      }
+    });
+
     on<StatisticsEvent>((event, emit) async {
       emit(state.copyWith(statusStatistics: FormzSubmissionStatus.inProgress));
       final response = await _repo.statistics();

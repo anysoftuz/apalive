@@ -6,6 +6,7 @@ import 'package:apalive/data/models/chat_message_model.dart';
 import 'package:apalive/data/models/common/filter_model.dart';
 import 'package:apalive/data/models/common/respons_model.dart';
 import 'package:apalive/data/models/content_model.dart';
+import 'package:apalive/data/models/employment_model.dart';
 import 'package:apalive/data/models/forum/forums_model.dart';
 import 'package:apalive/data/models/graduate_user_model.dart';
 import 'package:apalive/data/models/home/region_statistics_model.dart';
@@ -50,5 +51,8 @@ abstract class IApiRepo {
   Future<Either<Failure, ResponsModel<StatisticsModel>>> statistics();
   Future<Either<Failure, ResponsModel<RegionStatisticsModel>>> regionStatistics(
     String region,
+  );
+  Future<Either<Failure, ResponsModel<List<EmploymentModel>>>> employment(
+    String pinfl,
   );
 }

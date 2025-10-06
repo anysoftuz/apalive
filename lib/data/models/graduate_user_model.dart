@@ -12,6 +12,8 @@ class GraduateUserModel {
   final String username;
   @JsonKey(name: "password")
   final String password;
+  @JsonKey(name: "photo")
+  final String photo;
   @JsonKey(name: "name")
   final String name;
   @JsonKey(name: "middle_name")
@@ -28,6 +30,20 @@ class GraduateUserModel {
   final String gender;
   @JsonKey(name: "phone_number")
   final String phoneNumber;
+  @JsonKey(name: "region")
+  final String region;
+  @JsonKey(name: "year_of_entrance")
+  final String yearOfEntrance;
+  @JsonKey(name: "year_of_graduation")
+  final String yearOfGraduation;
+  @JsonKey(name: "degree")
+  final List<AcademicDegree> degree;
+  @JsonKey(name: "edu_form")
+  final List<AcademicDegree> eduForm;
+  @JsonKey(name: "faculty")
+  final String faculty;
+  @JsonKey(name: "specialty")
+  final String specialty;
   @JsonKey(name: "known_languages")
   final List<AcademicDegree> knownLanguages;
   @JsonKey(name: "state_awards")
@@ -40,8 +56,6 @@ class GraduateUserModel {
   final dynamic createdBy;
   @JsonKey(name: "deleted_by")
   final dynamic deletedBy;
-  @JsonKey(name: "photo")
-  final String photo;
 
   GraduateUserModel({
     this.id = 0,
@@ -63,6 +77,13 @@ class GraduateUserModel {
     this.characterTraits = const [],
     this.createdBy,
     this.deletedBy,
+    this.region = '',
+    this.yearOfEntrance = '',
+    this.yearOfGraduation = '',
+    this.degree = const [],
+    this.eduForm = const [],
+    this.faculty = '',
+    this.specialty = '',
   });
 
   factory GraduateUserModel.fromJson(Map<String, dynamic> json) =>

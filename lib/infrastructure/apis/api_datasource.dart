@@ -8,6 +8,7 @@ import 'package:apalive/data/models/chat_message_model.dart';
 import 'package:apalive/data/models/common/filter_model.dart';
 import 'package:apalive/data/models/common/respons_model.dart';
 import 'package:apalive/data/models/content_model.dart';
+import 'package:apalive/data/models/employment_model.dart';
 import 'package:apalive/data/models/home/region_statistics_model.dart';
 import 'package:apalive/data/models/home/statistics_model.dart';
 import 'package:apalive/data/models/forum/forums_model.dart';
@@ -43,6 +44,7 @@ abstract class ApiDatasource {
   Future<ResponsModel<List<BooksCategoryModel>>> getBooksCategory();
   Future<ResponsModel<StatisticsModel>> statistics();
   Future<ResponsModel<RegionStatisticsModel>> regionStatistics(String region);
+  Future<ResponsModel<List<EmploymentModel>>> employment(String pinfl);
 }
 
 class ApiDatasourceImpl implements ApiDatasource {
@@ -405,7 +407,9 @@ class ApiDatasourceImpl implements ApiDatasource {
   }
 
   @override
-  Future<ResponsModel<RegionStatisticsModel>> regionStatistics(String region) async {
+  Future<ResponsModel<RegionStatisticsModel>> regionStatistics(
+    String region,
+  ) async {
     final response = await dio.get(
       'dashboard/region-statistics/?region=$region',
       options: Options(
@@ -417,10 +421,10 @@ class ApiDatasourceImpl implements ApiDatasource {
             : {},
       ),
     );
-    
+
     // Wrap the response in a 'data' field to match ResponsModel structure
     final wrappedResponse = {'data': response.data};
-    
+
     return _handle.apiCantrol(
       request: () async => Response(
         data: wrappedResponse,
@@ -452,10 +456,10 @@ class ApiDatasourceImpl implements ApiDatasource {
             : {},
       ),
     );
-    
+
     // Wrap the response in a 'data' field to match ResponsModel structure
     final wrappedResponse = {'data': response.data};
-    
+
     return _handle.apiCantrol(
       request: () async => Response(
         data: wrappedResponse,
@@ -470,6 +474,29 @@ class ApiDatasourceImpl implements ApiDatasource {
       body: (response) => ResponsModel.fromJson(
         response,
         (p0) => StatisticsModel.fromJson(p0 as Map<String, dynamic>),
+      ),
+    );
+  }
+
+  @override
+  Future<ResponsModel<List<EmploymentModel>>> employment(String pinfl) {
+    return _handle.apiCantrol(
+      request: () => dio.get(
+        'dsba/employment/?pinfl=$pinfl',
+        options: Options(
+          headers: StorageRepository.getString(StorageKeys.TOKEN).isNotEmpty
+              ? {
+                  'Authorization':
+                      'Bearer ${StorageRepository.getString(StorageKeys.TOKEN)}',
+                }
+              : {},
+        ),
+      ),
+      body: (response) => ResponsModel.fromJson(
+        response,
+        (p0) => (p0 as List)
+            .map((e) => EmploymentModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
       ),
     );
   }

@@ -315,15 +315,19 @@ class TeacherIteam extends StatelessWidget {
                       "https://academy.rudn.ru/static/images/profile_default.png",
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${model.name} ${model.middleName} ${model.surname}',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  Text(model.phoneNumber),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${model.name} ${model.middleName} ${model.surname}',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(model.phoneNumber),
+                  ],
+                ),
               ),
             ],
           ),
