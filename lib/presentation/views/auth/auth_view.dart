@@ -39,6 +39,10 @@ class _AuthViewState extends State<AuthView> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        bottomNavigationBar: SizedBox(
+          width: double.infinity,
+          child: Text('1.0.0+5', textAlign: TextAlign.center),
+        ),
         body: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(
             16,
